@@ -36,25 +36,30 @@
             <div class="product-item">
                     <%--                <img src="${pageContext.request.contextPath}${imagePath}/${product.image}"--%>
                     <%--                     alt="${product.name}" class="product-img" />--%>
-                        <img src="${pageContext.request.contextPath}/uploads/${product.image}"
-                             alt="${product.name}" class="product-img" />
-                        <div class="product-info">
-                            <h5 class="product-name">${product.name}</h5>
-                            <p class="product-price"><fmt:formatNumber value="${product.price}" type="number" groupingUsed="true" />원</p>
-                            <div class="product-buttons">
-                                <button class="buy-now">구매하기</button>
-                                <button class="add-to-cart-icon">
-                                    <!-- 장바구니 SVG 아이콘 -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                                         fill="none" stroke="white" stroke-width="2" stroke-linecap="round"
-                                         stroke-linejoin="round" class="feather feather-shopping-cart">
-                                        <circle cx="9" cy="21" r="1"/>
-                                        <circle cx="20" cy="21" r="1"/>
-                                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
+                <a href="${pageContext.request.contextPath}/product/detail?id=${product.id}">
+                    <img src="${pageContext.request.contextPath}/uploads/${product.image}"
+                         alt="${product.name}" class="product-img"/>
+                </a>
+                <div class="product-info">
+                    <h5 class="product-name">${product.name}</h5>
+                    <p class="product-price"><fmt:formatNumber value="${product.price}"
+                                                               type="number"
+                                                               groupingUsed="true"/>원</p>
+                    <div class="product-buttons">
+                        <button class="buy-now">구매하기</button>
+                        <button class="add-to-cart-icon">
+                            <!-- 장바구니 SVG 아이콘 -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                 viewBox="0 0 24 24"
+                                 fill="none" stroke="white" stroke-width="2" stroke-linecap="round"
+                                 stroke-linejoin="round" class="feather feather-shopping-cart">
+                                <circle cx="9" cy="21" r="1"/>
+                                <circle cx="20" cy="21" r="1"/>
+                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
 
             </div>
         </c:if>
