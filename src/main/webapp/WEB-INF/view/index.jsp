@@ -13,6 +13,7 @@
         <div class="card-panel red lighten-2 text-white">${param.error}</div>
     </c:if>
     <%@include file="/WEB-INF/view/product/product-list.jsp" %>
+<%--    <%@include file="/WEB-INF/view/product/product-detail.jsp" %>--%>
 </main>
 <%@include file="/WEB-INF/view/include/footer.jsp" %>
 
