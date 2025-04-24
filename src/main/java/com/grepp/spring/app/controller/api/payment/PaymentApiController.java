@@ -1,4 +1,4 @@
-package com.grepp.spring.app.controller.api.cart;
+package com.grepp.spring.app.controller.api.payment;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -7,6 +7,6 @@ import org.springframework.stereotype.Controller;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-public class MemberApiController {
+public class PaymentApiController {
 
 }
