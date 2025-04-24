@@ -14,7 +14,6 @@
     <!--   spring   -->
     <spring-framework.version>6.2.3</spring-framework.version>
     <aspectj.version>1.9.22.1</aspectj.version>
-    <spring-security.version>6.4.4</spring-security.version>
     <!--   logging   -->
     <logback.version>1.5.16</logback.version>
     <slf4j.version>2.0.16</slf4j.version>
@@ -189,33 +188,6 @@
       <artifactId>mockito-junit-jupiter</artifactId>
       <version>5.17.0</version>
       <scope>test</scope>
-    </dependency>
-
-    <!--  spring security  -->
-    <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-web -->
-    <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-web</artifactId>
-      <version>${spring-security.version}</version>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-config -->
-    <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-config</artifactId>
-      <version>${spring-security.version}</version>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-test -->
-    <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-test</artifactId>
-      <version>${spring-security.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-taglibs -->
-    <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-taglibs</artifactId>
-      <version>${spring-security.version}</version>
     </dependency>
 
 
