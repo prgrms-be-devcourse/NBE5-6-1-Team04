@@ -25,6 +25,14 @@
   background-color: #f0f0f0;
 }
 
+.product-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
 .add-to-cart {
   margin-top: 10px;
   padding: 8px 12px;
@@ -39,4 +47,29 @@
 
 .add-to-cart:hover {
   background-color: #ff3c3c;
+}
+
+.buy-now {
+  flex: 1 1 auto;
+  padding: 8px 0;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  text-align: center;
+}
+
+.add-to-cart-icon {
+  flex: 0 0 42px;
+  height: 42px;
+  background-color: #ff5c5c;
+  border: none;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
 }
