@@ -1,4 +1,4 @@
-package com.grepp.spring.app.model.coffee;
+package com.grepp.spring.app.model.order;
 
 import org.springframework.stereotype.Repository;
 

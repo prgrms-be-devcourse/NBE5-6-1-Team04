@@ -1,4 +1,4 @@
-package com.grepp.spring.app.model.coffee;
+package com.grepp.spring.app.model.user;
 
 
 import lombok.RequiredArgsConstructor;
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class CoffeeService {
+public class MemberService{
+    
 
 }

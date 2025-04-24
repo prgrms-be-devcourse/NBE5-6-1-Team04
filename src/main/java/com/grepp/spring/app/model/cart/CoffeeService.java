@@ -1,4 +1,4 @@
-package com.grepp.spring.app.model.member;
+package com.grepp.spring.app.model.cart;
 
 
 import lombok.RequiredArgsConstructor;
@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class MemberService{
-    
+public class CoffeeService {
 
 }

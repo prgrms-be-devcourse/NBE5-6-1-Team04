@@ -1,4 +1,4 @@
-package com.grepp.spring.app.model.member.dto;
+package com.grepp.spring.app.model.user.dto;
 
 import lombok.Data;
 
