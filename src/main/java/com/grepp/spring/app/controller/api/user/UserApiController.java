@@ -1,18 +1,16 @@
 package com.grepp.spring.app.controller.api.user;
 
-import com.grepp.spring.app.controller.web.user.form.SignupRequest;
+
 import com.grepp.spring.app.model.user.UserService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Slf4j
-@Controller
+
+@RestController
 @RequiredArgsConstructor
 public class UserApiController {
 
-  private final UserService userService;
+    private final UserService userService;
 
 
 }

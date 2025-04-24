@@ -11,7 +11,7 @@ public class SinginRequest {
     private String userId;
 
     @NotBlank
-    @Size(min=4, max= 20)
+    @Size(min = 4, max = 20)
     private String password;
 
 }

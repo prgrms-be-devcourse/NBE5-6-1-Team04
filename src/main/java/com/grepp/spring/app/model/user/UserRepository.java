@@ -1,7 +1,6 @@
 package com.grepp.spring.app.model.user;
 
 
-
 import com.grepp.spring.app.model.user.dto.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;

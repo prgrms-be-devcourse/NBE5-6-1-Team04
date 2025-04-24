@@ -15,20 +15,20 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class UserService{
+public class UserService {
 
     private final UserRepository userRepository;
 
-@Transactional
+    @Transactional
     public void signup(User dto, Role role) {
-    if(userRepository.existsUserId(dto.getUserId()))
-        throw new CommonException(ResponseCode.BAD_REQUEST);
+        if (userRepository.existsUserId(dto.getUserId())) {
+            throw new CommonException(ResponseCode.BAD_REQUEST);
+        }
 
-    dto.setRole(role);
-    dto.setPassword(dto.getPassword());
-    dto.setCreatedAt(LocalDateTime.now());
-    userRepository.insert(dto);
-
+        dto.setRole(role);
+        dto.setPassword(dto.getPassword());
+        dto.setCreatedAt(LocalDateTime.now());
+        userRepository.insert(dto);
 
 
     }

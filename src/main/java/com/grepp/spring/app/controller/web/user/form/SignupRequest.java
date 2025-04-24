@@ -4,7 +4,6 @@ import com.grepp.spring.app.model.user.dto.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import java.time.LocalDateTime;
 import lombok.Data;
 
 @Data
@@ -23,7 +22,7 @@ public class SignupRequest {
     private String email;
 
 
-    public User toDto(){
+    public User toDto() {
         User user = new User();
         user.setUserId(userId);
         user.setPassword(password);
