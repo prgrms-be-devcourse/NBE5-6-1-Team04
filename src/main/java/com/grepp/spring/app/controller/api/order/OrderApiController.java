@@ -20,11 +20,12 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("api/orders")
 public class OrderApiController {
 
     private final OrderService orderService;
 
-    @PostMapping("/orders")
+    @PostMapping()
     public ResponseEntity<ApiResponse<OrderDto>> createOrder(
             @RequestBody @Valid OrderRequest request) {
 
@@ -53,7 +54,7 @@ public class OrderApiController {
         return new ResponseEntity<>(ApiResponse.success(createdOrder), HttpStatus.CREATED);
     }
 
-    @GetMapping("/orders")
+    @GetMapping()
     public ResponseEntity<ApiResponse<?>> getMyOrders(
             @RequestParam(required = false) String userId,
             @RequestParam(required = false) String email) {
@@ -78,7 +79,7 @@ public class OrderApiController {
         }
     }
 
-    @GetMapping("/orders/{orderId}")
+    @GetMapping("{orderId}")
     public ResponseEntity<ApiResponse<OrderDetailResponse>> getOrderDetail(@PathVariable Long orderId) {
         OrderDto order = orderService.getOrderById(orderId);
 
@@ -101,7 +102,7 @@ public class OrderApiController {
         return new ResponseEntity<>(ApiResponse.success(orderDetail), HttpStatus.OK);
     }
 
-    @GetMapping("/orders/admin")
+    @GetMapping("admin")
     public ResponseEntity<ApiResponse<List<OrderDto>>> getAllOrders() {
         List<OrderDto> orders = orderService.getAllOrders();
 
@@ -115,7 +116,7 @@ public class OrderApiController {
         return new ResponseEntity<>(ApiResponse.success(orders), HttpStatus.OK);
     }
 
-    @PutMapping("/orders/admin")
+    @PutMapping("admin")
     public ResponseEntity<ApiResponse<Void>> updateOrderStatus(
             @RequestBody @Valid OrderStatusUpdateRequest request) {
 
