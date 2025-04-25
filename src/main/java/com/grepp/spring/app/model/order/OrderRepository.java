@@ -9,12 +9,14 @@ import java.util.List;
 @Mapper
 public interface OrderRepository {
 
-    @Insert("INSERT INTO `order` (order_id, user_id, order_count, total_price, created_at, order_status, order_address) " +
-            "VALUES (#{orderId}, #{userId}, #{orderCount}, #{totalPrice}, #{createdAt}, #{orderStatus}, #{orderAddress})")
+    @Insert("INSERT INTO `order` (user_id, order_count, total_price, created_at, order_status, order_address) " +
+            "VALUES (#{userId}, #{orderCount}, #{totalPrice}, #{createdAt}, #{orderStatus}, #{orderAddress})")
+    @Options(useGeneratedKeys = true, keyProperty = "orderId", keyColumn = "order_id")
     void insertOrder(OrderDto orderDto);
 
-    @Insert("INSERT INTO order_item (order_item_id, order_id, product_id, order_count) " +
-            "VALUES (#{orderItemId}, #{orderId}, #{productId}, #{orderCount})")
+    @Insert("INSERT INTO order_item (order_id, product_id, order_count) " +
+            "VALUES (#{orderId}, #{productId}, #{orderCount})")
+    @Options(useGeneratedKeys = true, keyProperty = "orderItemId", keyColumn = "order_item_id")
     void insertOrderItem(OrderItemDto orderItemDto);
 
     @Select("SELECT order_id AS orderId, user_id AS userId, order_count AS orderCount, " +
