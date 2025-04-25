@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.grepp.spring.app.model.ProductRepository">
+  <resultMap id="ProductResultMap" type="com.grepp.spring.app.controller.web.product.form.ProductDto">
+    <id property="productId" column="product_id"/>
+    <result property="productName" column="product_name"/>
+    <result property="price" column="price"/>
+    <result property="description" column="description"/>
+    <result property="stock" column="stock"/>
+    <result property="createdAt" column="created_at"/>
+    <result property="imageBase64" column="image_base64"/>
+  </resultMap>
+
+  <select id="selectlistall" resultMap="ProductResultMap">
+    SELECT * FROM product
+  </select>
+
+
+  <insert id="insertproduct" useGeneratedKeys="true" keyProperty="productId">
+    insert into product (product_name, price, description, stock,image_base64, created_at) values (#{productName},#{price},#{description},#{stock},#{imageBase64}, #{createdAt})
+  </insert>
+
+</mapper>
