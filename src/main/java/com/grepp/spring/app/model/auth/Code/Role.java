@@ -2,7 +2,6 @@ package com.grepp.spring.app.model.auth.Code;
 
 
 public enum Role {
-        CUSTOMER,
-        ROLE_USER,
+        ROLE_CUSTOMER,
         ROLE_ADMIN
 }

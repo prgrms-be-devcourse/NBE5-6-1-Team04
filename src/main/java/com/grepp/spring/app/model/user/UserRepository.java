@@ -21,9 +21,6 @@ public interface UserRepository {
         + "values(#{userId}, #{password},#{name} ,#{address}, #{email}, #{role},#{createdAt})")
     void insert(User dto);
 
-
-
-
     @Select("select * from user where user_id = #{userId}")
     Optional<User> selectById(String userId);
 

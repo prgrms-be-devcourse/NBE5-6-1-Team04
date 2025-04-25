@@ -15,7 +15,7 @@ public record Principal (
 
     public static final Principal CUSTOMER = new Principal(
         "customer",
-        List.of(Role.CUSTOMER),
+        List.of(Role.ROLE_CUSTOMER),
         LocalDateTime.now());
 
 }

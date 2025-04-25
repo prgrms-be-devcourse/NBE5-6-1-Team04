@@ -49,7 +49,7 @@ public class UserService{
         if(!(loginUser.getPassword()).equals(password))
             return Principal.CUSTOMER;
 
-        return new Principal(userId, List.of(Role.ROLE_USER), LocalDateTime.now());
+        return new Principal(userId, List.of(Role.ROLE_CUSTOMER), LocalDateTime.now());
     }
 
     public User findById(String userId) {
