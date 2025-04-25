@@ -19,7 +19,6 @@ public class MyPageController {
     public String showMyOrders(@PathVariable String id, Model model) {
         List<OrderDto> myOrders = orderService.getOrdersByUserId(id);
         model.addAttribute("orders", myOrders);
-        System.out.println("myOrders : " +myOrders.toString());
         return "user/my-page";
     }
 }
