@@ -27,12 +27,17 @@ public class OrderService {
         orderDto.setCreatedAt(LocalDateTime.now());
         orderDto.setOrderStatus(OrderStatus.ORDERED.name());
 
+        orderRepository.insertOrder(orderDto);
+
+        Long orderId = orderDto.getOrderId();
+        if (orderId == null) {
+            throw new RuntimeException("주문 ID 생성 실패");
+        }
+
         if (orderDto.isGuest() && orderDto.getEmail() != null && !orderDto.getEmail().isEmpty()) {
             orderDto.setUserId(null);
             guestOrderEmailMap.put(orderDto.getOrderId(), orderDto.getEmail());
         }
-
-        orderRepository.insertOrder(orderDto);
 
         for (OrderItemDto item : orderItems) {
             item.setOrderId(orderDto.getOrderId());
