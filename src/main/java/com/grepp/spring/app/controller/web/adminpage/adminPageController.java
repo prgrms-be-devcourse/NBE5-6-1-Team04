@@ -14,7 +14,7 @@ public class adminPageController {
 
     private final OrderService orderService;
 
-    @GetMapping("/admin/orders")
+    @GetMapping("/admin")
     public String showAllOrders(Model model) {
         List<OrderDto> Orders = orderService.getAllOrders();
         model.addAttribute("orders", Orders);
