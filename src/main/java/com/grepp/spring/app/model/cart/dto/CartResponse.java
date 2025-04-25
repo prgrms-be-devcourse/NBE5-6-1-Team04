@@ -1,4 +1,4 @@
-package com.grepp.spring.app.model.cart.entity.dto;
+package com.grepp.spring.app.model.cart.dto;
 
 import java.util.List;
 import lombok.Data;
