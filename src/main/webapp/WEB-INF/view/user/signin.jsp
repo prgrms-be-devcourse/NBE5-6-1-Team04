@@ -2,7 +2,7 @@
 <%@include file="/WEB-INF/view/include/page.jsp" %>
 <html>
 <head>
-    <title>Grepp</title>
+    <title>Coffee-shop</title>
     <%@include file="/WEB-INF/view/include/static.jsp" %>
 </head>
 <body>
