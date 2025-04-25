@@ -1,0 +1,26 @@
+.pagination-container {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.pagination-btn {
+  display: inline-block;
+  padding: 8px 14px;
+  margin: 0 4px;
+  border-radius: 6px;
+  background-color: #e3f2fd; /* 연한 파랑 */
+  color: #333;
+  font-weight: bold;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.pagination-btn:hover {
+  background-color: #90caf9; /* hover시 좀 더 진한 파랑 */
+  color: white;
+}
+
+.pagination-btn.selected {
+  background-color: #ef5350; /* 선택된 버튼은 붉은색 */
+  color: white;
+}
