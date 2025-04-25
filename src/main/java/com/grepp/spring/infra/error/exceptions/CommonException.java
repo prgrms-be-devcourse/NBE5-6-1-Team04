@@ -3,6 +3,7 @@ package com.grepp.spring.infra.error.exceptions;
 import com.grepp.spring.infra.response.ResponseCode;
 import lombok.extern.slf4j.Slf4j;
 
+
 @Slf4j
 public class CommonException extends RuntimeException {
     

@@ -2,20 +2,21 @@
 
 <!-- NOTE logback 01: 설정파일 -->
 <configuration>
-  <appender class="ch.qos.logback.core.ConsoleAppender" name="CONSOLE">
+  <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
-      <pattern>${LOG_PATTERN}</pattern>
+      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
     </encoder>
   </appender>
 
-  <logger additivity="false" level="DEBUG" name="com.grepp.spring">
-    <appender-ref ref="CONSOLE"/>
-  </logger>
+  <logger name="com.grepp.spring" level="DEBUG"/>
+  <logger name="org.mybatis" level="DEBUG"/>
+  <logger name="java.sql" level="DEBUG"/>
+  <logger name="org.springframework" level="DEBUG"/>
 
   <!-- NOTE logback 02: 로깅 레벨
     TRACE > DEBUG > INFO > WARN > ERROR > OFF
     설정한 로깅레벨 이상의 심각도를 지닌 로그 메시지만 출력
-  -->
+    -->
   <property name="LOG_PATTERN"
     value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
 
