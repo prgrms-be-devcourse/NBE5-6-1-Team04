@@ -24,20 +24,18 @@ public class OrderService {
 
     @Transactional
     public OrderDto createOrder(OrderDto orderDto, List<OrderItemDto> orderItems) {
-        Long orderId = generateOrderId();
-        orderDto.setOrderId(orderId);
         orderDto.setCreatedAt(LocalDateTime.now());
-        orderDto.setOrderStatus(OrderStatus.PENDING.name());
+        orderDto.setOrderStatus(OrderStatus.ORDERED.name());
 
         if (orderDto.isGuest() && orderDto.getEmail() != null && !orderDto.getEmail().isEmpty()) {
             orderDto.setUserId(null);
-            guestOrderEmailMap.put(orderId, orderDto.getEmail());
+            guestOrderEmailMap.put(orderDto.getOrderId(), orderDto.getEmail());
         }
 
         orderRepository.insertOrder(orderDto);
 
         for (OrderItemDto item : orderItems) {
-            item.setOrderId(orderId);
+            item.setOrderId(orderDto.getOrderId());
             item.setOrderItemId(generateOrderItemId());
             orderRepository.insertOrderItem(item);
         }
@@ -46,7 +44,15 @@ public class OrderService {
     }
 
     public OrderDto getOrderById(Long orderId) {
-        return orderRepository.getOrderById(orderId);
+        OrderDto orderDto = orderRepository.getOrderById(orderId);
+        // 비회원 주문인 경우 이메일 정보 추가
+        if (orderDto != null && orderDto.isGuest()) {
+            String email = guestOrderEmailMap.get(orderId);
+            if (email != null) {
+                orderDto.setEmail(email);
+            }
+        }
+        return orderDto;
     }
 
     public List<OrderDto> getOrdersByUserId(String userId) {
@@ -84,15 +90,15 @@ public class OrderService {
         orderRepository.updateOrderStatus(orderId, status.name());
     }
 
-    public List<OrderDto> getPendingOrders() {
-        return orderRepository.getOrdersByStatus(OrderStatus.PENDING.name());
-    }
-
-    private Long generateOrderId() {
-        return System.currentTimeMillis();
+    public List<OrderDto> getOrderedOrders() {
+        return orderRepository.getOrdersByStatus(OrderStatus.ORDERED.name());
     }
 
     private Long generateOrderItemId() {
         return System.currentTimeMillis() + (long) (Math.random() * 100);
+    }
+
+    public List<OrderDto> getOrdersByStatus(String status) {
+        return orderRepository.getOrdersByStatus(status);
     }
 }
