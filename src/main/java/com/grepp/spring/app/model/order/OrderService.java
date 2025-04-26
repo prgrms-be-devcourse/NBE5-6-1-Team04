@@ -1,6 +1,5 @@
 package com.grepp.spring.app.model.order;
 
-import com.grepp.spring.app.model.cart.service.CartService;
 import com.grepp.spring.app.model.order.code.OrderStatus;
 import com.grepp.spring.app.model.order.dto.DirectOrderDto;
 import com.grepp.spring.app.model.order.dto.OrderDto;
@@ -155,7 +154,7 @@ public class OrderService {
     }
 
     @Transactional
-    public OrderDto createOrderDirectOrder(DirectOrderDto directOrderDto) {
+    public OrderDto createDirectOrder(DirectOrderDto directOrderDto) {
         boolean isLoggedIn = directOrderDto.getUserId() != null && !directOrderDto.getUserId().isEmpty();
 
         User user = null;

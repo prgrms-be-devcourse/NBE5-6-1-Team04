@@ -48,7 +48,7 @@ public class OrderApiController {
         log.info("즉시 구매 요청: {}", request);
 
         try {
-            OrderDto createdOrder = orderService.createOrderDirectOrder(request.toDto());
+            OrderDto createdOrder = orderService.createDirectOrder(request.toDto());
 
             OrderResponse response = OrderResponse.from(createdOrder);
             return new ResponseEntity<>(ApiResponse.success(response), HttpStatus.CREATED);
