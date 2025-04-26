@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="java.util.*, java.util.HashMap" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@include file="/WEB-INF/view/include/page.jsp" %>
 
 <%
     // 상품 목록 생성 (DB 데이터 연결 전 목업용)
@@ -47,7 +48,12 @@
                                                                groupingUsed="true"/>원</p>
                     <div class="product-buttons">
                         <button class="buy-now">구매하기</button>
-                        <button class="add-to-cart-icon">
+                        <button class="add-to-cart-icon"
+                                data-product-id="${product.id}"
+                                data-product-name="${product.name}"
+                                data-product-price="${product.price}"
+                                data-product-count=1
+                                onclick="addCartClick(this)">
                             <!-- 장바구니 SVG 아이콘 -->
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                                  viewBox="0 0 24 24"
@@ -73,3 +79,4 @@
         <a href="?page=${i}" class="pagination-btn ${i == pageNum ? 'selected' : ''}">${i}</a>
     </c:forEach>
 </div>
+<script src="${context}/assets/js/product-list-add-cart.js"></script>
