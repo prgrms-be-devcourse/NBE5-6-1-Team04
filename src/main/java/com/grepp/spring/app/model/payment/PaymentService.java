@@ -5,17 +5,25 @@ import com.grepp.spring.app.model.order.code.OrderStatus;
 import com.grepp.spring.app.model.order.dto.OrderDto;
 import com.grepp.spring.app.model.payment.dto.PaymentDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
 @Service
-@RequiredArgsConstructor
 public class PaymentService {
 
     private final PaymentRepository paymentRepository;
     private final OrderService orderService;
+
+    public PaymentService(
+            PaymentRepository paymentRepository,
+            @Lazy OrderService orderService
+    ) {
+        this.paymentRepository = paymentRepository;
+        this.orderService = orderService;
+    }
 
     @Transactional
     public PaymentDto processPayment(Long orderId, int paymentPrice) {

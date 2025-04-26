@@ -1,10 +1,14 @@
 package com.grepp.spring.app.model.order;
 
 import com.grepp.spring.app.model.order.code.OrderStatus;
+import com.grepp.spring.app.model.order.dto.DirectOrderDto;
 import com.grepp.spring.app.model.order.dto.OrderDto;
 import com.grepp.spring.app.model.order.dto.OrderItemDto;
 import com.grepp.spring.app.model.order.entity.Order;
 import com.grepp.spring.app.model.order.entity.OrderItem;
+import com.grepp.spring.app.model.payment.PaymentService;
+import com.grepp.spring.app.model.user.UserService;
+import com.grepp.spring.app.model.user.dto.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +25,8 @@ import java.util.stream.Collectors;
 public class OrderService {
 
     private final OrderRepository orderRepository;
+    private final PaymentService paymentService;
+    private final UserService userService;
 
     private static final Map<Long, String> guestOrderEmailMap = new ConcurrentHashMap<>();
 
@@ -51,8 +57,9 @@ public class OrderService {
         }
 
         for (OrderItemDto item : orderItems) {
+            Long orderItemId = item.getOrderItemId();
             item.setOrderId(orderId);
-            item.setOrderItemId(generateOrderItemId());
+            item.setOrderItemId(orderItemId);
 
             OrderItem orderItemEntity = item.toEntity();
             orderRepository.insertOrderItem(orderItemEntity);
@@ -139,14 +146,53 @@ public class OrderService {
                 .collect(Collectors.toList());
     }
 
-    private Long generateOrderItemId() {
-        return System.currentTimeMillis() + (long) (Math.random() * 100);
-    }
-
     public List<OrderDto> getOrdersByStatus(String status) {
         List<Order> orderEntities = orderRepository.getOrdersByStatus(status);
         return orderEntities.stream()
                 .map(OrderDto::from)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public OrderDto createDirectOrder(DirectOrderDto directOrderDto) {
+        boolean isLoggedIn = directOrderDto.getUserId() != null && !directOrderDto.getUserId().isEmpty();
+
+        User user = null;
+        if (isLoggedIn) {
+            user = userService.findById(directOrderDto.getUserId());
+            if (user == null) {
+                throw new RuntimeException("사용자 정보를 찾을 수 없습니다.");
+            }
+        }
+
+        OrderDto orderDto = new OrderDto();
+
+        if (isLoggedIn) {
+            orderDto.setUserId(directOrderDto.getUserId());
+            orderDto.setOrderAddress(directOrderDto.getAddress() != null && !directOrderDto.getAddress().isEmpty()
+                    ? directOrderDto.getAddress() : user.getAddress());
+        } else {
+            if (directOrderDto.getEmail() == null || directOrderDto.getEmail().isEmpty() ||
+                    directOrderDto.getAddress() == null || directOrderDto.getAddress().isEmpty()) {
+                throw new RuntimeException("비회원 주문 시 이메일과 주소는 필수입니다.");
+            }
+            orderDto.setEmail(directOrderDto.getEmail());
+            orderDto.setOrderAddress(directOrderDto.getAddress());
+        }
+
+        orderDto.setTotalPrice(directOrderDto.getTotalPrice());
+        orderDto.setOrderCount(directOrderDto.getProductCount());
+
+        List<OrderItemDto> orderItems = new ArrayList<>();
+        OrderItemDto orderItemDto = new OrderItemDto();
+        orderItemDto.setProductId(directOrderDto.getProductId());
+        orderItemDto.setOrderCount(directOrderDto.getProductCount());
+        orderItems.add(orderItemDto);
+
+        OrderDto createdOrder = createOrder(orderDto, orderItems);
+
+        paymentService.processPayment(createdOrder.getOrderId(), directOrderDto.getTotalPrice());
+
+        return createdOrder;
     }
 }
