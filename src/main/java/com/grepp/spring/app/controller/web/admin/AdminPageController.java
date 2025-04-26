@@ -1,4 +1,4 @@
-package com.grepp.spring.app.controller.web.adminpage;
+package com.grepp.spring.app.controller.web.admin;
 
 import com.grepp.spring.app.model.order.OrderService;
 import com.grepp.spring.app.model.order.dto.OrderDto;
