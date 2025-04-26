@@ -34,7 +34,7 @@ function addToCart(productId, productName, productPrice, productCount) {
   console.log('현재 장바구니:', cart);
 }
 
-function removeCartItem(productId, productCount) {
+function removeCartItem(productId) {
   const cart = getCart();
   if (!cart[productId]) {
     return;
