@@ -47,7 +47,15 @@
                                                                type="number"
                                                                groupingUsed="true"/>원</p>
                     <div class="product-buttons">
-                        <button class="buy-now">구매하기</button>
+                        <button class="buy-now"
+                                data-product-id="${product.id}"
+                                data-product-name="${product.name}"
+                                data-product-price="${product.price}"
+                                data-product-count=1
+                                onclick="directOrder(this)"
+                        >
+                            구매하기
+                        </button>
                         <button class="add-to-cart-icon"
                                 data-product-id="${product.id}"
                                 data-product-name="${product.name}"
