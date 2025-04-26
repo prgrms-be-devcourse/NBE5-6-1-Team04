@@ -1,4 +1,4 @@
-package com.grepp.spring.app.controller.web.user.form;
+package com.grepp.spring.app.controller.api.user.dto;
 
 import com.grepp.spring.app.model.user.dto.LoginUser;
 import jakarta.validation.constraints.NotBlank;

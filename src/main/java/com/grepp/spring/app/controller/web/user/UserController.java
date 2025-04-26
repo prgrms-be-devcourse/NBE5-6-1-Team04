@@ -1,7 +1,7 @@
 package com.grepp.spring.app.controller.web.user;
 
 
-import com.grepp.spring.app.controller.web.user.form.SignupRequest;
+import com.grepp.spring.app.controller.api.user.dto.SignupRequest;
 import com.grepp.spring.app.model.auth.Code.Role;
 import com.grepp.spring.app.model.user.UserService;
 import com.grepp.spring.app.model.user.dto.Principal;
@@ -34,17 +34,7 @@ public class UserController {
         return "user/signup";
     }
 
-    @PostMapping("/api/signup")
-    public String signup(@Valid @RequestBody SignupRequest request, BindingResult bindingResult,
-        Model model) {
-        if (bindingResult.hasErrors()) {
-            return "/signup";
-        }
-        model.addAttribute("signupRequest", request);
 
-        userService.signup(request.toDto(), Role.ROLE_CUSTOMER);
-        return "redirect:/";
-    }
 
 
     @GetMapping("/signin")
