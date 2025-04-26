@@ -15,6 +15,7 @@
     <%@include file="/WEB-INF/view/product/product-list.jsp" %>
 </main>
 <%@include file="/WEB-INF/view/include/footer.jsp" %>
+<script src="${context}/assets/js/cart.js"></script>
 
 </body>
 </html>
