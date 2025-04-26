@@ -32,12 +32,14 @@ public class SecurityConfig {
         .authorizeHttpRequests((req)->req
                 .requestMatchers("/api/signin","/api/signup","/","/api/guest-signin").permitAll()
                 .requestMatchers("/assets/**", "/resources/**", "/webapp/**").permitAll()
-
                 .requestMatchers("/orders/admin").hasRole(Roleform.ADMIN.getRole())
                 .requestMatchers("/api/products","/api/products/**","/api/new-products").permitAll()
-
+                .requestMatchers("/product/**").permitAll()
+                .requestMatchers("/signin").permitAll()
+                .requestMatchers("/signup").permitAll()
+                .requestMatchers("/cart").permitAll()
+                .requestMatchers("/orders").permitAll()
                 .anyRequest().authenticated()
-
             )
         .formLogin((form)->form
             .loginPage("/user/signin")
@@ -52,8 +54,6 @@ public class SecurityConfig {
           session.maximumSessions(1);
           session.invalidSessionUrl("/");}).csrf(csrf->csrf.disable());
 
-
-
     return http.build();
   }
   @Bean
@@ -65,7 +65,5 @@ public class SecurityConfig {
     return new BCryptPasswordEncoder();
 
   }
-
-
 
 }
