@@ -2,6 +2,7 @@ package com.grepp.spring.app.controller.api.order;
 
 import com.grepp.spring.app.controller.api.order.dto.OrderDetailResponse;
 import com.grepp.spring.app.controller.api.order.dto.OrderRequest;
+import com.grepp.spring.app.controller.api.order.dto.OrderResponse;
 import com.grepp.spring.app.controller.api.order.dto.OrderStatusUpdateRequest;
 import com.grepp.spring.app.model.order.OrderService;
 import com.grepp.spring.app.model.order.dto.OrderDto;
@@ -16,107 +17,87 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/orders")
+@RequestMapping("/api")
 public class OrderApiController {
 
     private final OrderService orderService;
 
-    @PostMapping()
-    public ResponseEntity<ApiResponse<OrderDto>> createOrder(
+    @PostMapping("/orders")
+    public ResponseEntity<ApiResponse<OrderResponse>> createOrder(
             @RequestBody @Valid OrderRequest request) {
 
-        OrderDto orderDto = new OrderDto();
+        OrderDto orderDto = request.toOrderDto();
 
-        if (request.getUserId() != null && !request.getUserId().isEmpty()) {
-            orderDto.setUserId(request.getUserId());
-            orderDto.setEmail(null);
-        } else if (request.getEmail() != null && !request.getEmail().isEmpty()) {
-            orderDto.setUserId(null);
-            orderDto.setEmail(request.getEmail());
-        } else {
+        if ((orderDto.getUserId() == null || orderDto.getUserId().isEmpty())
+                && (orderDto.getEmail() == null || orderDto.getEmail().isEmpty())) {
             return new ResponseEntity<>(ApiResponse.error(ResponseCode.BAD_REQUEST), HttpStatus.BAD_REQUEST);
         }
 
-        orderDto.setOrderCount(request.getOrderItems().size());
-        orderDto.setTotalPrice(request.getTotalPrice());
-        orderDto.setOrderAddress(request.getOrderAddress());
-
         OrderDto createdOrder = orderService.createOrder(orderDto, request.getOrderItems());
+        OrderResponse response = OrderResponse.from(createdOrder);
 
-        if (createdOrder.isGuest() && request.getEmail() != null) {
-            createdOrder.setEmail(request.getEmail());
-        }
-
-        return new ResponseEntity<>(ApiResponse.success(createdOrder), HttpStatus.CREATED);
+        return new ResponseEntity<>(ApiResponse.success(response), HttpStatus.CREATED);
     }
 
-    @GetMapping()
+    @GetMapping("/orders/{orderId}")
+    public ResponseEntity<ApiResponse<OrderDetailResponse>> getOrderDetail(@PathVariable Long orderId) {
+        OrderDto orderDto = orderService.getOrderById(orderId);
+
+        if (orderDto == null) {
+            return new ResponseEntity<>(ApiResponse.error(ResponseCode.NOT_FOUND), HttpStatus.NOT_FOUND);
+        }
+
+        List<OrderItemDto> orderItemDtos = orderService.getOrderItemsByOrderId(orderId);
+        OrderDetailResponse response = OrderDetailResponse.from(orderDto, orderItemDtos);
+
+        return new ResponseEntity<>(ApiResponse.success(response), HttpStatus.OK);
+    }
+
+    @GetMapping("/orders")
     public ResponseEntity<ApiResponse<?>> getMyOrders(
             @RequestParam(required = false) String userId,
             @RequestParam(required = false) String email) {
 
         if (userId != null && !userId.isEmpty()) {
-            List<OrderDto> orders = orderService.getOrdersByUserId(userId);
-            return new ResponseEntity<>(ApiResponse.success(orders), HttpStatus.OK);
+            List<OrderDto> orderDtos = orderService.getOrdersByUserId(userId);
+
+            List<OrderResponse> responses = orderDtos.stream()
+                    .map(OrderResponse::from)
+                    .collect(Collectors.toList());
+
+            return new ResponseEntity<>(ApiResponse.success(responses), HttpStatus.OK);
+
         } else if (email != null && !email.isEmpty()) {
-            List<OrderDto> orders = orderService.getOrdersByEmail(email);
+            List<OrderDto> orderDtos = orderService.getOrdersByEmail(email);
 
-            for (OrderDto order : orders) {
-                if (order.getUserId() != null && order.getUserId().startsWith("guest:")) {
-                    String extractedEmail = order.getUserId().substring(6);
-                    order.setEmail(extractedEmail);
-                    order.setUserId(null);
-                }
-            }
+            List<OrderResponse> responses = orderDtos.stream()
+                    .map(OrderResponse::from)
+                    .collect(Collectors.toList());
 
-            return new ResponseEntity<>(ApiResponse.success(orders), HttpStatus.OK);
+            return new ResponseEntity<>(ApiResponse.success(responses), HttpStatus.OK);
+
         } else {
             return new ResponseEntity<>(ApiResponse.error(ResponseCode.BAD_REQUEST), HttpStatus.BAD_REQUEST);
         }
     }
 
-    @GetMapping("{orderId}")
-    public ResponseEntity<ApiResponse<OrderDetailResponse>> getOrderDetail(@PathVariable Long orderId) {
-        OrderDto order = orderService.getOrderById(orderId);
+    @GetMapping("/orders/admin")
+    public ResponseEntity<ApiResponse<List<OrderResponse>>> getAllOrders() {
+        List<OrderDto> orderDtos = orderService.getAllOrders();
 
-        if (order == null) {
-            return new ResponseEntity<>(ApiResponse.error(ResponseCode.NOT_FOUND), HttpStatus.NOT_FOUND);
-        }
+        List<OrderResponse> responses = orderDtos.stream()
+                .map(OrderResponse::from)
+                .collect(Collectors.toList());
 
-        if (order.getUserId() != null && order.getUserId().startsWith("guest:")) {
-            String email = order.getUserId().substring(6);
-            order.setEmail(email);
-            order.setUserId(null);
-        }
-
-        List<OrderItemDto> orderItems = orderService.getOrderItemsByOrderId(orderId);
-
-        OrderDetailResponse orderDetail = new OrderDetailResponse();
-        orderDetail.setOrder(order);
-        orderDetail.setOrderItems(orderItems);
-
-        return new ResponseEntity<>(ApiResponse.success(orderDetail), HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.success(responses), HttpStatus.OK);
     }
 
-    @GetMapping("admin")
-    public ResponseEntity<ApiResponse<List<OrderDto>>> getAllOrders() {
-        List<OrderDto> orders = orderService.getAllOrders();
-
-        for (OrderDto order : orders) {
-            if (order.getUserId() != null && order.getUserId().startsWith("guest:")) {
-                String email = order.getUserId().substring(6);
-                order.setEmail(email);
-            }
-        }
-
-        return new ResponseEntity<>(ApiResponse.success(orders), HttpStatus.OK);
-    }
-
-    @PutMapping("admin")
+    @PutMapping("/orders/admin")
     public ResponseEntity<ApiResponse<Void>> updateOrderStatus(
             @RequestBody @Valid OrderStatusUpdateRequest request) {
 
