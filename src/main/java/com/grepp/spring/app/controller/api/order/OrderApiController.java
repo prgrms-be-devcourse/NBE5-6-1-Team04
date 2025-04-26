@@ -1,9 +1,6 @@
 package com.grepp.spring.app.controller.api.order;
 
-import com.grepp.spring.app.controller.api.order.dto.OrderDetailResponse;
-import com.grepp.spring.app.controller.api.order.dto.OrderRequest;
-import com.grepp.spring.app.controller.api.order.dto.OrderResponse;
-import com.grepp.spring.app.controller.api.order.dto.OrderStatusUpdateRequest;
+import com.grepp.spring.app.controller.api.order.dto.*;
 import com.grepp.spring.app.model.order.OrderService;
 import com.grepp.spring.app.model.order.dto.OrderDto;
 import com.grepp.spring.app.model.order.dto.OrderItemDto;
@@ -42,6 +39,24 @@ public class OrderApiController {
         OrderResponse response = OrderResponse.from(createdOrder);
 
         return new ResponseEntity<>(ApiResponse.success(response), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/orders/direct-order")
+    public ResponseEntity<ApiResponse<OrderResponse>> directOrder(
+            @RequestBody @Valid DirectOrderRequest request) {
+
+        log.info("즉시 구매 요청: {}", request);
+
+        try {
+            OrderDto createdOrder = orderService.createOrderDirectOrder(request.toDto());
+
+            OrderResponse response = OrderResponse.from(createdOrder);
+            return new ResponseEntity<>(ApiResponse.success(response), HttpStatus.CREATED);
+
+        } catch (Exception e) {
+            log.error("즉시 구매 처리 중 오류 발생", e);
+            return new ResponseEntity<>(ApiResponse.error(ResponseCode.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/orders/{orderId}")
