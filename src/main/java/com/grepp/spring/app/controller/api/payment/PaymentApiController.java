@@ -9,19 +9,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/payment")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class PaymentApiController {
 
     private final PaymentService paymentService;
 
-    @PostMapping
+    @PostMapping("/payment")
     public ResponseEntity<PaymentDto> processPayment(@RequestBody @Valid PaymentDto request) {
         PaymentDto payment = paymentService.processPayment(request.getOrderId(), request.getPaymentPrice());
         return new ResponseEntity<>(payment, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{orderId}")
+    @GetMapping("/payment/{orderId}")
     public ResponseEntity<PaymentDto> getPayment(@PathVariable Long orderId) {
         PaymentDto payment = paymentService.getPaymentByOrderId(orderId);
         if (payment == null) {
