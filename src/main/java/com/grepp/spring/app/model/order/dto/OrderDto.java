@@ -21,21 +21,21 @@ public class OrderDto {
     private LocalDateTime createdAt;
 
     public static OrderDto from(Order order) {
-        OrderDto dto = new OrderDto();
-        dto.setOrderId(order.getOrderId());
-        dto.setUserId(order.getUserId());
-        dto.setOrderCount(order.getOrderCount());
-        dto.setTotalPrice(order.getTotalPrice());
-        dto.setOrderStatus(order.getOrderStatus());
-        dto.setOrderAddress(order.getOrderAddress());
-        dto.setCreatedAt(order.getCreatedAt());
+        OrderDto orderDto = new OrderDto();
+        orderDto.setOrderId(order.getOrderId());
+        orderDto.setUserId(order.getUserId());
+        orderDto.setOrderCount(order.getOrderCount());
+        orderDto.setTotalPrice(order.getTotalPrice());
+        orderDto.setOrderStatus(order.getOrderStatus());
+        orderDto.setOrderAddress(order.getOrderAddress());
+        orderDto.setCreatedAt(order.getCreatedAt());
 
         if (order.getUserId() != null) {
-            dto.setEmail(order.getUserId().substring(6));
-            dto.setUserId(null);
+            orderDto.setEmail(order.getUserId().substring(6));
+            orderDto.setUserId(null);
         }
 
-        return dto;
+        return orderDto;
     }
 
     public Order toEntity() {

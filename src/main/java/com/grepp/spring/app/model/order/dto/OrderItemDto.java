@@ -20,12 +20,12 @@ public class OrderItemDto {
     private int productPrice;
 
     public static OrderItemDto from(OrderItem orderItem) {
-        OrderItemDto dto = new OrderItemDto();
-        dto.setOrderItemId(orderItem.getOrderItemId());
-        dto.setOrderId(orderItem.getOrderId());
-        dto.setProductId(orderItem.getProductId());
-        dto.setOrderCount(orderItem.getOrderCount());
-        return dto;
+        OrderItemDto orderItemDto = new OrderItemDto();
+        orderItemDto.setOrderItemId(orderItem.getOrderItemId());
+        orderItemDto.setOrderId(orderItem.getOrderId());
+        orderItemDto.setProductId(orderItem.getProductId());
+        orderItemDto.setOrderCount(orderItem.getOrderCount());
+        return orderItemDto;
     }
 
     public OrderItem toEntity() {
