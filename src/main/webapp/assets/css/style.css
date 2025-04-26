@@ -3,6 +3,7 @@
 
 @import "product.css";
 @import "reset.css";
+@import "order.css";
 
 body {
   display: flex;
