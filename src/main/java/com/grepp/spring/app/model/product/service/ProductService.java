@@ -1,7 +1,7 @@
-package com.grepp.spring.app.model.order;
+package com.grepp.spring.app.model.product.service;
 
-import com.grepp.spring.app.controller.web.product.form.ProductDto;
-import com.grepp.spring.app.model.ProductRepository;
+import com.grepp.spring.app.model.product.dto.ProductDto;
+import com.grepp.spring.app.model.product.repository.ProductRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,29 +11,29 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ProductService {
 
-  private final ProductRepository orderRepository;
+  private final ProductRepository productRepositoryService;
 
 
   public List<ProductDto> selectListAll() {
 
-    return orderRepository.selectlistall();
+    return productRepositoryService.selectlistall();
   }
 
   public ProductDto selectProductDetail(int id) {
 
-    return orderRepository.selectProductDetail(id);
+    return productRepositoryService.selectProductDetail(id);
   }
 
   @Transactional
   public void insertproducts(ProductDto productDto) {
 
-    orderRepository.insertproduct(productDto);
+    productRepositoryService.insertproduct(productDto);
   }
 
   @Transactional
   public void deleteproduct(int id) {
 
 
-    orderRepository.deleteproduct(id);
+    productRepositoryService.deleteproduct(id);
   }
 }

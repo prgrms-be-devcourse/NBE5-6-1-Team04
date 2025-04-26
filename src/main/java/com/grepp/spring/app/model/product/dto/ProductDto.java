@@ -1,4 +1,4 @@
-package com.grepp.spring.app.controller.web.product.form;
+package com.grepp.spring.app.model.product.dto;
 
 import java.time.LocalDateTime;
 import lombok.Data;

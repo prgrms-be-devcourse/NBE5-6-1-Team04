@@ -1,6 +1,6 @@
-package com.grepp.spring.app.model;
+package com.grepp.spring.app.model.product.repository;
 
-import com.grepp.spring.app.controller.web.product.form.ProductDto;
+import com.grepp.spring.app.model.product.dto.ProductDto;
 import java.util.List;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
@@ -8,7 +8,6 @@ import org.apache.ibatis.annotations.Select;
 
 @Mapper
 public interface ProductRepository {
-
 
   List<ProductDto> selectlistall();
 
