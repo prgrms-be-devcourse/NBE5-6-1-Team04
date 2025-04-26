@@ -8,25 +8,20 @@
     <thead>
     <tr>
         <th>주문번호</th>
-        <th>회원ID/이메일</th>
         <th>총 금액</th>
-        <th>상태</th>
-        <th>상세 내용</th>
+        <th>배송 상태</th>
+        <th>배송지</th>
+<%--     필요하면 적용   <th>상세 페이지</th>--%>
     </tr>
     </thead>
     <tbody>
     <c:forEach var="order" items="${orders}">
         <tr>
             <td>${order.orderId}</td>
-            <td>
-                <c:choose>
-                    <c:when test="${not empty order.userId}">${order.userId}</c:when>
-                    <c:otherwise>${order.email}</c:otherwise>
-                </c:choose>
-            </td>
             <td><fmt:formatNumber value="${order.totalPrice}" type="number" groupingUsed="true"/>원</td>
             <td>${order.orderStatus}</td>
-            <td><a href="/orders/${order.orderId}">보기</a></td>
+            <td>${order.orderAddress}</td>
+<%--            <td><a href="/orders/${order.orderId}">보기</a></td>--%>
         </tr>
     </c:forEach>
     </tbody>
