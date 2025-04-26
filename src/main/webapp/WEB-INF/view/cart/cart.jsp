@@ -50,6 +50,7 @@
         <th>가격</th>
         <th>수량</th>
         <th>소계</th>
+        <th></th>
     </tr>
     </thead>
     <tbody id="cart-body">
@@ -97,10 +98,21 @@
       const td4 = document.createElement('td');
       td4.textContent = subtotal.toLocaleString();
 
+      const td5 = document.createElement('td');
+      const deleteButton = document.createElement('button');
+      deleteButton.textContent = '삭제';
+      deleteButton.className = 'delete-btn';
+      deleteButton.onclick = function() {
+        removeCartItem(item.productId, item.productCount);
+        location.reload();
+      };
+      td5.appendChild(deleteButton);
+
       row.appendChild(td1);
       row.appendChild(td2);
       row.appendChild(td3);
       row.appendChild(td4);
+      row.appendChild(td5);
 
       cartBody.appendChild(row);
 

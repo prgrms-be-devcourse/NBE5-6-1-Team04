@@ -34,15 +34,13 @@ function addToCart(productId, productName, productPrice, productCount) {
   console.log('현재 장바구니:', cart);
 }
 
-function removeToCart(productId, productCount) {
+function removeCartItem(productId, productCount) {
   const cart = getCart();
   if (!cart[productId]) {
     return;
   }
 
-  const count = parseInt(productCount, 10);
-
-  cart[productId].productCount -= count;
+  cart[productId].productCount -= 1;
 
   if (cart[productId].productCount <= 0) {
     delete cart[productId];
