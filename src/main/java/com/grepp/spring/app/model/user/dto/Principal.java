@@ -7,15 +7,18 @@ import org.apache.ibatis.type.Alias;
 
 @Alias("USER_PRINCIPAL")
 public record Principal (
-    String userId,
     List<Role> roles,
     LocalDateTime createdAt
 
 ){
 
     public static final Principal CUSTOMER = new Principal(
-        "customer",
         List.of(Role.ROLE_CUSTOMER),
         LocalDateTime.now());
+
+    public static final Principal GUEST = new Principal(
+        List.of(Role.ROLE_GUEST),
+        LocalDateTime.now());
+
 
 }

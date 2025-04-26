@@ -2,6 +2,7 @@ package com.grepp.spring.app.model.user;
 
 
 
+import com.grepp.spring.app.model.user.dto.GuestUser;
 import com.grepp.spring.app.model.user.dto.LoginUser;
 import com.grepp.spring.app.model.user.dto.User;
 import java.util.Optional;
@@ -26,5 +27,8 @@ public interface UserRepository {
 
     @Select("select user_id, password from user where user_id = #{userId}")
     Optional<LoginUser> selectLoginUserById(String userId);
+
+    @Select("select * from user where email = #{email}")
+    User selectByEmail(String email);
 
 }
