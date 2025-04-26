@@ -3,8 +3,8 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.grepp.spring.app.model.ProductRepository">
-  <resultMap id="ProductResultMap" type="com.grepp.spring.app.controller.web.product.form.ProductDto">
+<mapper namespace="com.grepp.spring.app.model.product.repository.ProductRepository">
+  <resultMap id="ProductResultMap" type="com.grepp.spring.app.model.product.dto.ProductDto">
     <id property="productId" column="product_id"/>
     <result property="productName" column="product_name"/>
     <result property="price" column="price"/>
