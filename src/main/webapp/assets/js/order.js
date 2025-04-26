@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
   const cart = getCart();
-  console.log('cart', cart);
   const orderBody = document.getElementById('order-body');
   const totalDiv = document.getElementById('order-total-price');
 

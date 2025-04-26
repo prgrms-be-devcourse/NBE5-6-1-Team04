@@ -103,7 +103,7 @@
       deleteButton.textContent = '삭제';
       deleteButton.className = 'delete-btn';
       deleteButton.onclick = function() {
-        removeCartItem(item.productId, item.productCount);
+        removeCartItem(item.productId);
         location.reload();
       };
       td5.appendChild(deleteButton);
