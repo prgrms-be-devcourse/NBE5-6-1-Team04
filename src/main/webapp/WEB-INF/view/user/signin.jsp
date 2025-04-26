@@ -29,7 +29,7 @@
             </div>
         </div>
         <button class="btn waves-effect waves-light offset-s1" type="submit" name="action">
-            회원가입
+            로그인
             <i class="material-icons right">send</i>
         </button>
     </form:form>
