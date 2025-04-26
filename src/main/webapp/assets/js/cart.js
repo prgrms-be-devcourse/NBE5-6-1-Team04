@@ -2,11 +2,13 @@ const LOCALSTORAGE_KEY = 'cart';
 
 function getCart() {
   const savedCart = localStorage.getItem(LOCALSTORAGE_KEY);
+  // TODO: 사용자가 로그인 했다면 GET /api/cart 필요
   return savedCart ? JSON.parse(savedCart) : {};
 }
 
 function updateCart(cart) {
   localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(cart));
+  // TODO: 사용자가 로그인 했다면 POST /api/cart 필요
 }
 
 function clearCart() {
