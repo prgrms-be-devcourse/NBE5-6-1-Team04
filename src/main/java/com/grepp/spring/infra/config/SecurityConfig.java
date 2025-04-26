@@ -19,12 +19,12 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
+
   private final AuthFailHandler authFailHandler;
 
   public SecurityConfig(AuthFailHandler authFailHandler) {
     this.authFailHandler = authFailHandler;
   }
-
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
@@ -56,14 +56,15 @@ public class SecurityConfig {
 
     return http.build();
   }
+
   @Bean
   public AuthenticationSuccessHandler customLoginSuccessHandler() {
     return new CustomLoginSuccessHandler();
   }
+  
   @Bean
   public PasswordEncoder passwordEncoder(){
     return new BCryptPasswordEncoder();
-
   }
 
 }
