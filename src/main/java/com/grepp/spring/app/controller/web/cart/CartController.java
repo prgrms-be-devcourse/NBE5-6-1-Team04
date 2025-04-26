@@ -16,10 +16,7 @@ public class CartController {
     private final CartService cartService;
 
     @GetMapping("/cart")
-    public String getCart(@RequestParam(name = "userId") String userId, Model model) {
-        log.info("장바구니 페이지 요청: userId={}", userId);
-        CartResponse cartResponse = cartService.getCart(userId);
-        model.addAttribute("cart", cartResponse);
+    public String getCart() {
         return "cart/cart";
     }
 } 
