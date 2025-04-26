@@ -3,10 +3,9 @@ package com.grepp.spring.app.model.user.dto;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-public class SignupFormDTO {
+public class SignupFormDto {
     @NotNull
     private String userId;
     @NotNull
@@ -15,10 +14,10 @@ public class SignupFormDTO {
     private String address;
     private String email;
 
-    public SignupFormDTO() {}
+    public SignupFormDto() {}
 
     @Builder
-    public SignupFormDTO(String userId, String password, String name, String address,
+    public SignupFormDto(String userId, String password, String name, String address,
         String email) {
         this.userId = userId;
         this.password = password;

@@ -5,16 +5,16 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class SigninFormDTO {
+public class SigninFormDto {
     @NotNull
     private String userId;
     @NotNull
     private String password;
 
-    public SigninFormDTO() {}
+    public SigninFormDto() {}
 
     @Builder
-    public SigninFormDTO(String userId, String password) {
+    public SigninFormDto(String userId, String password) {
         this.userId = userId;
         this.password = password;
     }
