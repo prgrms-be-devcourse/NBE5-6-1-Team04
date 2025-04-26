@@ -17,7 +17,6 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final OrderService orderService;
 
-    // 결제 처리 - 이후 주문 상태 업데이트 필요
     @Transactional
     public PaymentDto processPayment(Long orderId, int paymentPrice) {
 
