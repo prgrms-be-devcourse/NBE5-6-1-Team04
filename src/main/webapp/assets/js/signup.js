@@ -30,16 +30,32 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
     const id = userIdInput.value;
     if (!id) return;
-    const data = {
-      "userId": "yourUserIddd",
-      "password": "1234",
-      "name": "John Doe",
-      "address": "1234 Elm St, Springfield, IL",
-      "email": "johndoedd@example.com",
-      "role": "USER"
-    }
+    const formData = {
+      userId: document.querySelector('#userId').value,
+      password: document.querySelector('#password').value,
+      name: document.querySelector('#name').value,
+      address: document.querySelector('#address').value,
+      email: document.querySelector('#email').value,
+    };
 
-    console.log(e.target.value);
+    try {
+      const response = await fetch('/api/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if (response.ok) {
+        alert('회원가입에 성공했습니다.')
+        window.location.href = '/';
+      } else {
+        alert('회원가입에 실패했습니다.')
+      }
+    } catch (error) {
+      console.error('회원가입 중 오류:', error);
+    }
 
     // e.target.submit();
     // TODO: ID 중복 체크 API 필요
