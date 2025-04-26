@@ -58,7 +58,7 @@
 
 
 <div class="buy-btn">
-    <button class="buy-now">구매하기</button>
+    <button class="buy-now" onclick="goToOrderPage()">구매하기</button>
 </div>
 
 <div class="total" id="total-price">

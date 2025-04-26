@@ -51,3 +51,11 @@ function removeToCart(productId, productCount) {
   updateCart(cart);
   console.log('현재 장바구니:', cart);
 }
+
+async function goToOrderPage() {
+  const isConfirmed = confirm("결제 하시겠습니까?");
+  if (!isConfirmed) {
+    return;
+  }
+  window.location.href = '/orders';
+}
