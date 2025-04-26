@@ -50,6 +50,8 @@
                         <button class="buy-now">구매하기</button>
                         <button class="add-to-cart-icon"
                                 data-product-id="${product.id}"
+                                data-product-name="${product.name}"
+                                data-product-price="${product.price}"
                                 data-product-count=1
                                 onclick="addCartClick(this)">
                             <!-- 장바구니 SVG 아이콘 -->
