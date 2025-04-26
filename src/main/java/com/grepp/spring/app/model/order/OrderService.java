@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private PaymentService paymentService;
+    private final PaymentService paymentService;
     private final UserService userService;
 
     private static final Map<Long, String> guestOrderEmailMap = new ConcurrentHashMap<>();
