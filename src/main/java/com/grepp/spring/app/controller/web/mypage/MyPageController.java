@@ -1,7 +1,7 @@
 package com.grepp.spring.app.controller.web.mypage;
 
 import com.grepp.spring.app.model.mypage.MyPageService;
-import com.grepp.spring.app.model.mypage.dto.MyPageDto;
+import com.grepp.spring.app.model.mypage.dto.MyPageOrderDto;
 import com.grepp.spring.app.model.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -20,7 +20,7 @@ public class MyPageController {
     @GetMapping("/my-page/{id}")
     public String showMyOrders(@PathVariable String id, Model model, HttpSession session) {
         String sessionUserId = (String) session.getAttribute("userId");
-        List<MyPageDto> myOrders = myPageService.getMyOrders(id, sessionUserId);
+        List<MyPageOrderDto> myOrders = myPageService.getMyOrders(id, sessionUserId);
         model.addAttribute("orders", myOrders);
         return "user/my-page";
     }

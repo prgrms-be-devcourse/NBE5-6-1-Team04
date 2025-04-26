@@ -6,8 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class MyPageDto {
-
+public class MyPageOrderDto {
     @NotNull
     private Long orderId;
     private int totalPrice;
