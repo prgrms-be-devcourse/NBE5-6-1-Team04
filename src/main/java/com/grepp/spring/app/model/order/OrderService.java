@@ -3,6 +3,8 @@ package com.grepp.spring.app.model.order;
 import com.grepp.spring.app.model.order.code.OrderStatus;
 import com.grepp.spring.app.model.order.dto.OrderDto;
 import com.grepp.spring.app.model.order.dto.OrderItemDto;
+import com.grepp.spring.app.model.order.entity.Order;
+import com.grepp.spring.app.model.order.entity.OrderItem;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,41 +29,61 @@ public class OrderService {
         orderDto.setCreatedAt(LocalDateTime.now());
         orderDto.setOrderStatus(OrderStatus.ORDERED.name());
 
-        orderRepository.insertOrder(orderDto);
+        if (orderDto.isGuest() && orderDto.getEmail() != null && !orderDto.getEmail().isEmpty()) {
+            orderDto.setUserId(null);
+
+            Order orderEntity = orderDto.toEntity();
+            orderRepository.insertOrder(orderEntity);
+
+            Long orderId = orderEntity.getOrderId();
+            guestOrderEmailMap.put(orderId, orderDto.getEmail());
+
+            orderDto.setOrderId(orderId);
+        } else {
+            Order orderEntity = orderDto.toEntity();
+            orderRepository.insertOrder(orderEntity);
+            orderDto.setOrderId(orderEntity.getOrderId());
+        }
 
         Long orderId = orderDto.getOrderId();
         if (orderId == null) {
             throw new RuntimeException("주문 ID 생성 실패");
         }
 
-        if (orderDto.isGuest() && orderDto.getEmail() != null && !orderDto.getEmail().isEmpty()) {
-            orderDto.setUserId(null);
-            guestOrderEmailMap.put(orderDto.getOrderId(), orderDto.getEmail());
-        }
-
         for (OrderItemDto item : orderItems) {
-            item.setOrderId(orderDto.getOrderId());
+            item.setOrderId(orderId);
             item.setOrderItemId(generateOrderItemId());
-            orderRepository.insertOrderItem(item);
+
+            OrderItem orderItemEntity = item.toEntity();
+            orderRepository.insertOrderItem(orderItemEntity);
         }
 
         return orderDto;
     }
 
     public OrderDto getOrderById(Long orderId) {
-        OrderDto orderDto = orderRepository.getOrderById(orderId);
-        // 비회원 주문인 경우 이메일 정보 추가
-        if (orderDto != null && orderDto.isGuest()) {
+        Order orderEntity = orderRepository.getOrderById(orderId);
+        if (orderEntity == null) {
+            return null;
+        }
+
+        OrderDto orderDto = OrderDto.from(orderEntity);
+
+        if (orderDto.isGuest()) {
             String email = guestOrderEmailMap.get(orderId);
             if (email != null) {
                 orderDto.setEmail(email);
             }
         }
+
         return orderDto;
     }
 
     public List<OrderDto> getOrdersByUserId(String userId) {
-        return orderRepository.getOrdersByUserId(userId);
+        List<Order> orderEntities = orderRepository.getOrdersByUserId(userId);
+        return orderEntities.stream()
+                .map(OrderDto::from)
+                .collect(Collectors.toList());
     }
 
     public List<OrderDto> getOrdersByEmail(String email) {
@@ -72,10 +94,11 @@ public class OrderService {
 
         List<OrderDto> orders = new ArrayList<>();
         for (Long orderId : orderIds) {
-            OrderDto order = orderRepository.getOrderById(orderId);
+            Order order = orderRepository.getOrderById(orderId);
             if (order != null) {
-                order.setEmail(email);
-                orders.add(order);
+                OrderDto dto = OrderDto.from(order);
+                dto.setEmail(email);
+                orders.add(dto);
             }
         }
 
@@ -83,7 +106,21 @@ public class OrderService {
     }
 
     public List<OrderDto> getAllOrders() {
-        return orderRepository.getAllOrders();
+        List<Order> orderEntities = orderRepository.getAllOrders();
+        List<OrderDto> orderDtos = orderEntities.stream()
+                .map(OrderDto::from)
+                .collect(Collectors.toList());
+
+        for (OrderDto dto : orderDtos) {
+            if (dto.getUserId() == null) {
+                String email = guestOrderEmailMap.get(dto.getOrderId());
+                if (email != null) {
+                    dto.setEmail(email);
+                }
+            }
+        }
+
+        return orderDtos;
     }
 
     public List<OrderItemDto> getOrderItemsByOrderId(Long orderId) {
@@ -96,7 +133,10 @@ public class OrderService {
     }
 
     public List<OrderDto> getOrderedOrders() {
-        return orderRepository.getOrdersByStatus(OrderStatus.ORDERED.name());
+        List<Order> orderEntities = orderRepository.getOrdersByStatus(OrderStatus.ORDERED.name());
+        return orderEntities.stream()
+                .map(OrderDto::from)
+                .collect(Collectors.toList());
     }
 
     private Long generateOrderItemId() {
@@ -104,6 +144,9 @@ public class OrderService {
     }
 
     public List<OrderDto> getOrdersByStatus(String status) {
-        return orderRepository.getOrdersByStatus(status);
+        List<Order> orderEntities = orderRepository.getOrdersByStatus(status);
+        return orderEntities.stream()
+                .map(OrderDto::from)
+                .collect(Collectors.toList());
     }
 }
