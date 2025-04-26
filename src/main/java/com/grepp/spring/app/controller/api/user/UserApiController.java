@@ -8,7 +8,6 @@ import com.grepp.spring.app.model.auth.Code.Role;
 import com.grepp.spring.app.model.user.UserService;
 import com.grepp.spring.app.model.user.dto.GuestUser;
 import com.grepp.spring.app.model.user.dto.Principal;
-import com.grepp.spring.app.model.user.dto.User;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,9 +30,10 @@ public class UserApiController {
 
     private final UserService userService;
 
-
     @PostMapping("/signup")
-    public ResponseEntity<Void> signup(@Valid @RequestBody SignupRequest request, BindingResult bindingResult,
+    public ResponseEntity<Void> signup(
+        @Valid @RequestBody SignupRequest request,
+        BindingResult bindingResult,
         Model model) {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -44,7 +44,8 @@ public class UserApiController {
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<Principal> signin(@Valid @ModelAttribute SigninRequest request,
+    public ResponseEntity<Principal> signin(
+        @Valid @ModelAttribute SigninRequest request,
         HttpSession session) {
         Principal principal = userService.signin(request.getUserId(), request.getPassword());
 
@@ -53,9 +54,9 @@ public class UserApiController {
         return new ResponseEntity<>(principal, HttpStatus.CREATED);
     }
 
-
     @PostMapping("/guest-signin")
-    public ResponseEntity<GuestUser> guestSignin(@Valid @RequestBody GuestSigninRequest request,
+    public ResponseEntity<GuestUser> guestSignin(
+        @Valid @RequestBody GuestSigninRequest request,
         HttpSession session) {
         GuestUser user = userService.GuestSignin(request.getEmail());
 
@@ -63,9 +64,9 @@ public class UserApiController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-      if (!(user.getRole() == Role.ROLE_GUEST)) {
-        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-      }
+        if (!(user.getRole() == Role.ROLE_GUEST)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
 
         session.setAttribute("GuestUser", user);
         return new ResponseEntity<>(user, HttpStatus.CREATED);

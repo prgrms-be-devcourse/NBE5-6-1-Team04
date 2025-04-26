@@ -1,29 +1,21 @@
 package com.grepp.spring.app.controller.web.user;
 
 
-import com.grepp.spring.app.controller.api.user.dto.SignupRequest;
-import com.grepp.spring.app.model.auth.Code.Role;
 import com.grepp.spring.app.model.user.UserService;
 import com.grepp.spring.app.model.user.dto.Principal;
 import com.grepp.spring.app.model.user.dto.SigninFormDto;
 import com.grepp.spring.app.model.user.dto.SignupFormDto;
 import com.grepp.spring.app.model.user.dto.User;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/")
 public class UserController {
 
     private final UserService userService;
@@ -33,9 +25,6 @@ public class UserController {
         model.addAttribute("signupForm", new SignupFormDto());
         return "user/signup";
     }
-
-
-
 
     @GetMapping("/signin")
     public String signinPage(Model model) {
