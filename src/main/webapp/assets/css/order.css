@@ -1,0 +1,36 @@
+.order-container {
+  display: flex;
+  margin: 20px;
+}
+.order-items {
+  flex: 2;
+  margin-right: 20px;
+}
+.order-summary {
+  flex: 1;
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 8px;
+}
+.order-summary input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+.order-summary .total {
+  margin-top: 10px;
+  font-weight: bold;
+  font-size: 16px;
+}
+.order-summary button {
+  margin-top: 20px;
+  width: 100%;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
