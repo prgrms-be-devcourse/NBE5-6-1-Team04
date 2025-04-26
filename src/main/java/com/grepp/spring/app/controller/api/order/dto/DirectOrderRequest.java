@@ -20,13 +20,13 @@ public class DirectOrderRequest {
     private Integer totalPrice;
 
     public DirectOrderDto toDto() {
-        DirectOrderDto dto = new DirectOrderDto();
-        dto.setUserId(this.userId);
-        dto.setEmail(this.email);
-        dto.setAddress(this.address);
-        dto.setProductId(this.productId);
-        dto.setProductCount(this.productCount);
-        dto.setTotalPrice(this.totalPrice);
-        return dto;
+        DirectOrderDto directOrderDto = new DirectOrderDto();
+        directOrderDto.setUserId(this.userId);
+        directOrderDto.setEmail(this.email);
+        directOrderDto.setAddress(this.address);
+        directOrderDto.setProductId(this.productId);
+        directOrderDto.setProductCount(this.productCount);
+        directOrderDto.setTotalPrice(this.totalPrice);
+        return directOrderDto;
     }
 }
