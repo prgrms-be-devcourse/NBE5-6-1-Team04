@@ -14,7 +14,6 @@ import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface CartRepository {
-    // Cart 관련 쿼리
     @Insert("INSERT INTO cart (user_id) VALUES (#{userId})")
     @Options(useGeneratedKeys = true, keyProperty = "cartId")
     void createCart(@Param("userId") String userId);
@@ -25,7 +24,6 @@ public interface CartRepository {
     @Select("SELECT EXISTS (SELECT 1 FROM cart WHERE user_id = #{userId})")
     boolean existsCartByUserId(String userId);
 
-    // CartItem 관련 쿼리
     @Insert("INSERT INTO cart_item (cart_id, product_id, product_count) VALUES (#{cartId}, #{productId}, #{productCount})")
     void insertCartItem(CartItem cartItem);
 
