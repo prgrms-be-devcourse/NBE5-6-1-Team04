@@ -12,11 +12,9 @@ public class SignupRequest {
     @NotBlank
     private String userId;
     @NotBlank
-    @Size(min = 4, max = 10)
+    @Size(min = 4, max = 20)
     private String password;
-    @NotBlank
     private String name;
-    @NotBlank
     private String address;
     @Email
     private String email;

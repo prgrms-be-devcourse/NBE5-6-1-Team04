@@ -34,7 +34,7 @@ public class UserController {
         return "user/signup";
     }
 
-    @PostMapping("/signup")
+    @PostMapping("/api/signup")
     public String signup(@Valid @RequestBody SignupRequest request, BindingResult bindingResult,
         Model model) {
         if (bindingResult.hasErrors()) {
