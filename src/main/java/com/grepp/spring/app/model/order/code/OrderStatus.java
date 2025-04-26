@@ -1,7 +1,7 @@
 package com.grepp.spring.app.model.order.code;
 
 public enum OrderStatus {
-    PENDING("대기중"),
+    ORDERED("결제대기"),
     PAID("결제완료"),
     PROCESSING("처리중"),
     SHIPPED("배송중"),
