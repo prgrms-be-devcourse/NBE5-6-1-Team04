@@ -8,6 +8,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,27 +19,49 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 
-
-@RestController
-@RequiredArgsConstructor
 @RequestMapping("/api")
+@Controller
+@RequiredArgsConstructor
+
 public class ProductApiController {
 
   private final ProductService orderService;
 
 
-  //상품리스트 가져오기
   @GetMapping("/products")
-  public List<ProductDto> productlist(Model model){
-    List<ProductDto> productDto = orderService.selectListAll();
-    return productDto;
+  public String productlist(
+      @RequestParam(value = "page", defaultValue = "1") int pageNum,
+      @RequestParam(value = "size", defaultValue = "5") int productsPerPage,
+      Model model
+  ) {
+    List<ProductDto> productDtoList = orderService.selectListAll();
+
+    int startIndex = (pageNum - 1) * productsPerPage;
+    int endIndex = Math.min(startIndex + productsPerPage, productDtoList.size());
+
+
+    model.addAttribute("productList", productDtoList);
+    model.addAttribute("productsPerPage", productsPerPage);
+    model.addAttribute("pageNum", pageNum);
+    model.addAttribute("startIndex", startIndex);
+    model.addAttribute("endIndex", endIndex);
+
+    return "index";
   }
+
 
   //상세정보
   @GetMapping("/products/{id}")
-  public ProductDto productDetailInfo(@PathVariable("id") int id,Model model){
+  public String productDetailInfo(@PathVariable("id") int id,Model model){
     ProductDto productDetail = orderService.selectProductDetail(id);
-    return productDetail;
+
+    if (productDetail.getImageBase64() == null
+        || productDetail.getImageBase64().trim().isEmpty()
+        || "null".equalsIgnoreCase(productDetail.getImageBase64().trim())) {
+      productDetail.setImageBase64(null); // 확실히 비우기
+    }
+    model.addAttribute("product",productDetail);
+    return "product/product-detail";
   }
 
   //상품정보 추가
