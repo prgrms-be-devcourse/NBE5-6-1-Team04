@@ -61,7 +61,7 @@ public class SecurityConfig {
   public AuthenticationSuccessHandler customLoginSuccessHandler() {
     return new CustomLoginSuccessHandler();
   }
-  
+
   @Bean
   public PasswordEncoder passwordEncoder(){
     return new BCryptPasswordEncoder();
