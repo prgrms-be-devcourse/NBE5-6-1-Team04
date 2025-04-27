@@ -30,9 +30,12 @@ public interface OrderRepository {
             "order_address AS orderAddress FROM `order` WHERE user_id = #{userId}")
     List<Order> getOrdersByUserId(String userId);
 
-    @Select("SELECT order_id AS orderId, user_id AS userId, order_count AS orderCount, " +
-            "total_price AS totalPrice, created_at AS createdAt, order_status AS orderStatus, " +
-            "order_address AS orderAddress FROM `order` WHERE user_id LIKE CONCAT('guest_%') AND #{email} = #{email}")
+    @Select("SELECT o.order_id AS orderId, o.user_id AS userId, o.order_count AS orderCount, " +
+            "o.total_price AS totalPrice, o.created_at AS createdAt, o.order_status AS orderStatus, " +
+            "o.order_address AS orderAddress " +
+            "FROM `order` o " +
+            "JOIN `user` u ON o.user_id = u.user_id " +
+            "WHERE u.email = #{email}")
     List<Order> getOrdersByEmail(String email);
 
     @Select("SELECT oi.order_item_id AS orderItemId, oi.order_id AS orderId, oi.product_id AS productId, " +
@@ -41,10 +44,6 @@ public interface OrderRepository {
             "JOIN product p ON oi.product_id = p.product_id " +
             "WHERE oi.order_id = #{orderId}")
     List<OrderItemDto> getOrderItemsByOrderId(Long orderId);
-
-    @Select("SELECT order_item_id AS orderItemId, order_id AS orderId, product_id AS productId, " +
-            "order_count AS orderCount FROM order_item WHERE order_id = #{orderId}")
-    List<OrderItem> getOrderItemEntitiesByOrderId(Long orderId);
 
     @Update("UPDATE `order` SET order_status = #{orderStatus} WHERE order_id = #{orderId}")
     void updateOrderStatus(@Param("orderId") Long orderId, @Param("orderStatus") String orderStatus);

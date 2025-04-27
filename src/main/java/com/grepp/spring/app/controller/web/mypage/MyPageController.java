@@ -28,17 +28,17 @@ public class MyPageController {
          // 인증된 사용자의 ID 가져오기
          String authenticatedUserId = authentication.getName();
 
-         // 요청된 ID와 인증된 사용자의 ID가 일치하는지 확인
-         if (!id.equals(authenticatedUserId)) {
-             redirectAttributes.addFlashAttribute("errorMessage", "접근 권한이 없습니다.");
-             return "redirect:/";
-         }
-
-         // DB에 사용자가 존재하는지 확인
-         if (!userRepository.existsUserId(id)) {
-             redirectAttributes.addFlashAttribute("errorMessage", "존재하지 않는 사용자입니다.");
-             return "redirect:/";
-         }
+//         // 요청된 ID와 인증된 사용자의 ID가 일치하는지 확인
+//         if (!id.equals(authenticatedUserId)) {
+//             redirectAttributes.addFlashAttribute("errorMessage", "접근 권한이 없습니다.");
+//             return "redirect:/";
+//         }
+//
+//         // DB에 사용자가 존재하는지 확인
+//         if (!userRepository.existsUserId(id)) {
+//             redirectAttributes.addFlashAttribute("errorMessage", "존재하지 않는 사용자입니다.");
+//             return "redirect:/";
+//         }
         
         List<MyPageOrderDto> myOrders = myPageService.getMyOrders(id, id);
         model.addAttribute("orders", myOrders);

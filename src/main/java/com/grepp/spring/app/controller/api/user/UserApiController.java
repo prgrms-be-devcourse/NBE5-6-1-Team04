@@ -47,8 +47,7 @@ public class UserApiController {
 
     @PostMapping("/signin")
     public ResponseEntity<Principal> signin(
-        @Valid @ModelAttribute SigninRequest request,
-        HttpSession session) {
+        @Valid @RequestBody SigninRequest request, HttpSession session) {
         Principal principal = userService.signin(request.getUserId(), request.getPassword());
 
         session.setAttribute("principal", principal);

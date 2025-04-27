@@ -37,14 +37,13 @@ public class OrderService {
         orderDto.setOrderStatus(OrderStatus.ORDERED.name());
 
         if (orderDto.isGuest() && orderDto.getEmail() != null && !orderDto.getEmail().isEmpty()) {
-            GuestUser guestUser = userService.GuestSignin(orderDto.getEmail());
-
             User user = userService.findByEmail(orderDto.getEmail());
-            if (user != null) {
-                orderDto.setUserId(user.getUserId());
-            } else {
-                throw new RuntimeException("비회원 사용자 생성에 실패했습니다.");
+
+            if (user == null) {
+                throw new RuntimeException("이메일에 해당하는 사용자를 찾을 수 없습니다.");
             }
+
+            orderDto.setUserId(user.getUserId());
 
             Order orderEntity = orderDto.toEntity();
             orderRepository.insertOrder(orderEntity);
@@ -97,27 +96,27 @@ public class OrderService {
     public List<OrderDto> getOrdersByUserId(String userId) {
         List<Order> orderEntities = orderRepository.getOrdersByUserId(userId);
         return orderEntities.stream()
-                .map(OrderDto::from)
+                .map(order -> {
+                    OrderDto dto = OrderDto.from(order);
+                    dto.setUserId(order.getUserId());
+                    return dto;
+                })
                 .collect(Collectors.toList());
+//        return orderEntities.stream()
+//                .map(OrderDto::from)
+//                .collect(Collectors.toList());
     }
 
     public List<OrderDto> getOrdersByEmail(String email) {
-        List<Long> orderIds = guestOrderEmailMap.entrySet().stream()
-                .filter(entry -> email.equals(entry.getValue()))
-                .map(Map.Entry::getKey)
+        List<Order> orderEntities = orderRepository.getOrdersByEmail(email);
+        return orderEntities.stream()
+                .map(order -> {
+                    OrderDto dto = OrderDto.from(order);
+                    dto.setUserId(order.getUserId());
+                    dto.setEmail(email);
+                    return dto;
+                })
                 .collect(Collectors.toList());
-
-        List<OrderDto> orders = new ArrayList<>();
-        for (Long orderId : orderIds) {
-            Order order = orderRepository.getOrderById(orderId);
-            if (order != null) {
-                OrderDto dto = OrderDto.from(order);
-                dto.setEmail(email);
-                orders.add(dto);
-            }
-        }
-
-        return orders;
     }
 
     public List<OrderDto> getAllOrders() {
