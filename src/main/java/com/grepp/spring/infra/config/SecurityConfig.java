@@ -40,6 +40,8 @@ public class SecurityConfig {
                 .requestMatchers("/signup").permitAll()
                 .requestMatchers("/api/cart/**").authenticated()
                 .requestMatchers("/orders").permitAll()
+                .requestMatchers("/orders/guest").permitAll()
+                .requestMatchers("/api/orders").permitAll()
                 .anyRequest().authenticated()
             )
         .formLogin((form)->form
