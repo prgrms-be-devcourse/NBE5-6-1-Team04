@@ -26,7 +26,7 @@ function renderProducts(productList, pageNum) {
     const itemHtml = `
       <div class="product-item">
         <a href="/product/detail?id=${product.productId}">
-          <img src="/uploads/${product.imageBase64}" alt="${product.productName}" class="product-img" />
+            <img src="data:image/jpg;base64,${product.imageBase64}" class="product-img" alt="${product.productName}" />
         </a>
         <div class="product-info">
           <h5 class="product-name">${product.productName}</h5>
