@@ -34,8 +34,9 @@ public class UserService {
             throw new CommonException(ResponseCode.BAD_REQUEST);
         }
 
+        String encodedPassword = passwordEncoder.encode(dto.getPassword());
         dto.setRole(role);
-        dto.setPassword(dto.getPassword());
+        dto.setPassword(encodedPassword);
         dto.setCreatedAt(LocalDateTime.now());
         userRepository.insert(dto);
 
