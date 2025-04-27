@@ -44,6 +44,7 @@ public class SecurityConfig {
                 .requestMatchers("/guest-signin").permitAll()
                 .requestMatchers("/api/orders").permitAll()
                 .requestMatchers("/api/session-info").permitAll()
+                .requestMatchers("/cart").permitAll()
                 .anyRequest().authenticated()
             )
         .formLogin((form)->form

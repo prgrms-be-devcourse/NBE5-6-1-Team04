@@ -18,20 +18,17 @@ import java.util.Map;
 public class SessionApiController {
 
     @GetMapping("/session-info")
-    public ResponseEntity<Map<String, Object>> sessionInfo(
-        Authentication authentication
-    ) {
-        if (authentication == null || !authentication.isAuthenticated()) {
+    public ResponseEntity<Map<String, Object>> sessionInfo(HttpSession session) {
+        Principal principal = (Principal) session.getAttribute("principal");
+        String userId = (String) session.getAttribute("userId");
+
+        if (principal == null || userId == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        CustomUserDetail userDetail = (CustomUserDetail) authentication.getPrincipal();
-        String userId = userDetail.getUsername();
-
         Map<String, Object> result = new HashMap<>();
         result.put("userId", userId);
-        result.put("roles", authentication.getAuthorities());
-
+        result.put("roles", principal.roles());
         return ResponseEntity.ok(result);
     }
 }
