@@ -60,7 +60,7 @@ public class UserService {
 
     public User findById(String userId) {
         return userRepository.selectById(userId)
-            .orElseThrow(() -> new CommonException(ResponseCode.BAD_REQUEST));
+                .orElseThrow(() -> new CommonException(ResponseCode.BAD_REQUEST));
     }
 
 //    public GuestUser GuestSignin(String email) {
@@ -119,5 +119,9 @@ public class UserService {
         guestUser.setRole(user.getRole());
         guestUser.setAddress(user.getAddress());
         return guestUser;
+    }
+
+    public User findByEmail(String email) {
+        return userRepository.selectByEmail(email);
     }
 }
