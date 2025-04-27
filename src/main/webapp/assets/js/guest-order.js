@@ -13,24 +13,24 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     fetch(`/api/orders?email=${encodeURIComponent(email)}`)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('주문 조회 실패');
-          }
-          return response.json();
-        })
-        .then(data => {
-            console.log(data)
-          if (data.code === '0000' && data.data.length > 0) {
-            renderOrders(data.data);
-          } else {
-            orderSection.innerHTML = '<p>조회된 주문이 없습니다.</p>';
-          }
-        })
-        .catch(error => {
-          console.error('에러 발생:', error);
-          orderSection.innerHTML = '<p>주문 조회 중 오류가 발생했습니다.</p>';
-        });
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('주문 조회 실패');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log(data)
+      if (data.code === '0000' && data.data.length > 0) {
+        renderOrders(data.data);
+      } else {
+        orderSection.innerHTML = '<p>조회된 주문이 없습니다.</p>';
+      }
+    })
+    .catch(error => {
+      console.error('에러 발생:', error);
+      orderSection.innerHTML = '<p>주문 조회 중 오류가 발생했습니다.</p>';
+    });
   });
 
   function renderOrders(orders) {

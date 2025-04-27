@@ -14,6 +14,8 @@ import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public void signup(User dto, Role role) {
@@ -50,11 +53,14 @@ public class UserService {
 
         LoginUser loginUser = optional.get();
 
-        if (!(loginUser.getPassword()).equals(password)) {
+        if (!passwordEncoder.matches(password, loginUser.getPassword())) {
             throw new CommonException(ResponseCode.BAD_REQUEST);
         }
-
-        return new Principal(List.of(Role.ROLE_CUSTOMER), LocalDateTime.now());
+        if (loginUser.getUserId().equals("admin")) {
+            return new Principal(List.of(Role.ROLE_ADMIN), LocalDateTime.now());
+        } else {
+            return new Principal(List.of(Role.ROLE_CUSTOMER), LocalDateTime.now());
+        }
     }
 
 

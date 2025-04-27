@@ -12,17 +12,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (res.ok) {
       const { userId, role } = await res.json();
-      console.log('세션 정보:', { userId, role });
+      console.log('role', role);
+      console.log('세션 정보:', { userId, role: role[0] });
 
-      if (role === 'ROLE_ADMIN') {
+      if (role[0] === 'ROLE_ADMIN') {
         // 관리자 메뉴
         navMobile.innerHTML = `
           <li><span>관리자님 환영합니다</span></li>
-          <li><a href="/admin/dashboard" class="grey-text">관리자 페이지</a></li>
+          <li><a href="/admin" class="grey-text">관리자 페이지</a></li>
           <li><a href="/logout" class="grey-text">로그아웃</a></li>
         `;
       }
-      else if (role === 'ROLE_GUEST' || !role ) {
+      else if (role[0] === 'ROLE_GUEST' || !role ) {
         // 비회원 메뉴
         navMobile.innerHTML = `
           <li><span>비회원님 환영합니다</span></li>

@@ -4,6 +4,7 @@ import com.grepp.spring.app.model.user.dto.LoginUser;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.Getter;
 
 @Data
 public class SigninRequest {

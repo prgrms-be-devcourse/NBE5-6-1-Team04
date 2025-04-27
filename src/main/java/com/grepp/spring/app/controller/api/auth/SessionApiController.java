@@ -3,6 +3,7 @@ package com.grepp.spring.app.controller.api.auth;
 import com.grepp.spring.app.model.auth.CustomUserDetail;
 import com.grepp.spring.app.model.user.dto.Principal;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+@Slf4j
 @RequestMapping("/api")
 public class SessionApiController {
 
@@ -28,7 +30,7 @@ public class SessionApiController {
 
         Map<String, Object> result = new HashMap<>();
         result.put("userId", userId);
-        result.put("roles", principal.roles());
+        result.put("role", principal.roles());
         return ResponseEntity.ok(result);
     }
 }
