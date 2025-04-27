@@ -35,6 +35,9 @@ public class SecurityConfig {
                 .requestMatchers("/api/cart/**").authenticated()
                 .requestMatchers("/api/guest/orders").permitAll()
                 .requestMatchers("/orders").permitAll()
+                .requestMatchers("/orders/guest").permitAll()
+                .requestMatchers("/guest-signin").permitAll()
+                .requestMatchers("/api/orders").permitAll()
                 .anyRequest().authenticated()
             )
         .formLogin((form)->form

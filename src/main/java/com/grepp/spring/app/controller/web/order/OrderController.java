@@ -16,4 +16,9 @@ public class OrderController {
     public String showOrderPage() {
         return "order/order";
     }
+
+    @GetMapping("orders/guest")
+    public String showGuestOrderPage() {
+        return "order/guest";
+    }
 }
