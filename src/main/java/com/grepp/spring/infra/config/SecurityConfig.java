@@ -43,6 +43,7 @@ public class SecurityConfig {
                 .requestMatchers("/orders/guest").permitAll()
                 .requestMatchers("/guest-signin").permitAll()
                 .requestMatchers("/api/orders").permitAll()
+                .requestMatchers("/api/session-info").permitAll()
                 .anyRequest().authenticated()
             )
         .formLogin((form)->form

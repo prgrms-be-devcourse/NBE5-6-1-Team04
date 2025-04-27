@@ -50,6 +50,7 @@ public class UserApiController {
         Principal principal = userService.signin(request.getUserId(), request.getPassword());
 
         session.setAttribute("principal", principal);
+        session.setAttribute("userId", request.getUserId());
 
         return new ResponseEntity<>(principal, HttpStatus.CREATED);
     }
