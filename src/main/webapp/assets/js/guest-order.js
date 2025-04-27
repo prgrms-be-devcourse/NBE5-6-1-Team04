@@ -20,7 +20,8 @@ document.addEventListener('DOMContentLoaded', function () {
           return response.json();
         })
         .then(data => {
-          if (result.code === '0000' && result.data && result.data.length > 0) {
+            console.log(data)
+          if (data.code === '0000' && data.data.length > 0) {
             renderOrders(data.data);
           } else {
             orderSection.innerHTML = '<p>조회된 주문이 없습니다.</p>';
