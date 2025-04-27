@@ -8,6 +8,7 @@ import com.grepp.spring.app.model.order.entity.Order;
 import com.grepp.spring.app.model.order.entity.OrderItem;
 import com.grepp.spring.app.model.payment.PaymentService;
 import com.grepp.spring.app.model.user.UserService;
+import com.grepp.spring.app.model.user.dto.GuestUser;
 import com.grepp.spring.app.model.user.dto.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -36,7 +37,14 @@ public class OrderService {
         orderDto.setOrderStatus(OrderStatus.ORDERED.name());
 
         if (orderDto.isGuest() && orderDto.getEmail() != null && !orderDto.getEmail().isEmpty()) {
-            orderDto.setUserId(null);
+            GuestUser guestUser = userService.GuestSignin(orderDto.getEmail());
+
+            User user = userService.findByEmail(orderDto.getEmail());
+            if (user != null) {
+                orderDto.setUserId(user.getUserId());
+            } else {
+                throw new RuntimeException("비회원 사용자 생성에 실패했습니다.");
+            }
 
             Order orderEntity = orderDto.toEntity();
             orderRepository.insertOrder(orderEntity);
@@ -176,6 +184,15 @@ public class OrderService {
                     directOrderDto.getAddress() == null || directOrderDto.getAddress().isEmpty()) {
                 throw new RuntimeException("비회원 주문 시 이메일과 주소는 필수입니다.");
             }
+
+            GuestUser guestUser = userService.GuestSignin(directOrderDto.getEmail());
+            User createdUser = userService.findByEmail(directOrderDto.getEmail());
+            if (createdUser != null) {
+                orderDto.setUserId(createdUser.getUserId());
+            } else {
+                throw new RuntimeException("비회원 사용자 생성에 실패했습니다.");
+            }
+
             orderDto.setEmail(directOrderDto.getEmail());
             orderDto.setOrderAddress(directOrderDto.getAddress());
         }

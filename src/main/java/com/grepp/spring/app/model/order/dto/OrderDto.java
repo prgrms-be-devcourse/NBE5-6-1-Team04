@@ -51,6 +51,6 @@ public class OrderDto {
     }
 
     public boolean isGuest() {
-        return userId == null || userId.isEmpty();
+        return userId == null || userId.isEmpty() || userId.startsWith("guest_");
     }
 }

@@ -32,7 +32,7 @@ public interface OrderRepository {
 
     @Select("SELECT order_id AS orderId, user_id AS userId, order_count AS orderCount, " +
             "total_price AS totalPrice, created_at AS createdAt, order_status AS orderStatus, " +
-            "order_address AS orderAddress FROM `order` WHERE user_id LIKE CONCAT('guest:', #{email})")
+            "order_address AS orderAddress FROM `order` WHERE user_id LIKE CONCAT('guest_%') AND #{email} = #{email}")
     List<Order> getOrdersByEmail(String email);
 
     @Select("SELECT oi.order_item_id AS orderItemId, oi.order_id AS orderId, oi.product_id AS productId, " +
