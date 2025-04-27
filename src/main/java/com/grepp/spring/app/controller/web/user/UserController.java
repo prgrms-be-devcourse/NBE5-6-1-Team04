@@ -1,17 +1,23 @@
 package com.grepp.spring.app.controller.web.user;
 
 
+import com.grepp.spring.app.controller.api.user.dto.SigninRequest;
 import com.grepp.spring.app.model.user.UserService;
 import com.grepp.spring.app.model.user.dto.Principal;
 import com.grepp.spring.app.model.user.dto.SigninFormDto;
 import com.grepp.spring.app.model.user.dto.SignupFormDto;
 import com.grepp.spring.app.model.user.dto.User;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Slf4j
 @Controller
@@ -31,6 +37,7 @@ public class UserController {
         model.addAttribute("signinForm", new SigninFormDto());
         return "user/signin";
     }
+
 
     @GetMapping("/guest-signin")
     public String gusetsigninForm() {

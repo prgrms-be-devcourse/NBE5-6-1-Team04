@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,18 +39,18 @@ public class UserService {
 
     }
 
-    public Principal signin(String userId, String password) {
+    public Principal signin(String userId, String password) throws RuntimeException {
 
         Optional<LoginUser> optional = userRepository.selectLoginUserById(userId);
 
         if (optional.isEmpty()) {
-            return Principal.GUEST;
+            throw new CommonException(ResponseCode.BAD_REQUEST);
         }
 
         LoginUser loginUser = optional.get();
 
         if (!(loginUser.getPassword()).equals(password)) {
-            return Principal.GUEST;
+            throw new CommonException(ResponseCode.BAD_REQUEST);
         }
 
         return new Principal(List.of(Role.ROLE_CUSTOMER), LocalDateTime.now());
@@ -61,20 +62,14 @@ public class UserService {
             .orElseThrow(() -> new CommonException(ResponseCode.BAD_REQUEST));
     }
 
-    public GuestUser GuestSignin(String email) {
+    public GuestUser guestSignin(String email) {
         log.info("GuestSignin 호출됨. 이메일: {}", email);
         User user = userRepository.selectByEmail(email);
         log.info("selectByEmail 결과: {}", user);
 
-        if (user == null) {
-            log.info("사용자를 찾을 수 없음.");
-            return null;
-        }
-
-        log.info("조회된 사용자 역할: {}", user.getRole());
-        if (user.getRole() != Role.ROLE_GUEST) {
-            log.info("게스트 역할이 아님.");
-            return null;
+        if (user.getRole() == Role.ROLE_CUSTOMER) {
+            log.info("회원은 게스트 로그인 사용할 수 없습니다.");
+            throw new CommonException(ResponseCode.BAD_REQUEST);
         }
 
         GuestUser guestUser = new GuestUser();
