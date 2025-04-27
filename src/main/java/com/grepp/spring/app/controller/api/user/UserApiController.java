@@ -56,19 +56,9 @@ public class UserApiController {
 
     @PostMapping("/guest-signin")
     public ResponseEntity<GuestUser> guestSignin(
-        @Valid @RequestBody GuestSigninRequest request,
-        HttpSession session) {
+        @Valid @RequestBody GuestSigninRequest request) {
         GuestUser user = userService.GuestSignin(request.getEmail());
 
-        if (user == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        if (!(user.getRole() == Role.ROLE_GUEST)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
-
-        session.setAttribute("GuestUser", user);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 }
