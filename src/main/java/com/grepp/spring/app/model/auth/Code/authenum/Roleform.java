@@ -1,4 +1,4 @@
-package com.grepp.spring.app.controller.web.auth.form;
+package com.grepp.spring.app.model.auth.Code.authenum;
 
 public enum Roleform {
   ADMIN("ADMIN"),

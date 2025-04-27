@@ -3,7 +3,8 @@ package com.grepp.spring.infra.config;
 
 import static org.springframework.http.HttpMethod.GET;
 
-import com.grepp.spring.app.controller.web.auth.form.Roleform;
+
+import com.grepp.spring.app.model.auth.Code.authenum.Roleform;
 import com.grepp.spring.infra.config.handler.AuthFailHandler;
 import com.grepp.spring.infra.config.handler.CustomLoginSuccessHandler;
 import org.springframework.context.annotation.Bean;
@@ -37,7 +38,7 @@ public class SecurityConfig {
                 .requestMatchers("/product/**").permitAll()
                 .requestMatchers("/signin").permitAll()
                 .requestMatchers("/signup").permitAll()
-                .requestMatchers("/cart").permitAll()
+                .requestMatchers("/api/cart/**").authenticated()
                 .requestMatchers("/orders").permitAll()
                 .anyRequest().authenticated()
             )

@@ -1,7 +1,7 @@
 package com.grepp.spring.app.model.auth;
 
-import com.grepp.spring.app.controller.web.user.form.UserDto;
 import com.grepp.spring.app.model.AuthRepository;
+import com.grepp.spring.app.model.user.dto.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +18,7 @@ public class CusetomUserService implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    UserDto user = authRepository.selectuserId(username)
+    User user = authRepository.selectuserId(username)
         .orElseThrow(()->new UsernameNotFoundException(username));
     log.info(user.getPassword());
     return new CustomUserDetail(user);

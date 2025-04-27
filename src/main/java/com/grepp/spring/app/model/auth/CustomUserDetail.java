@@ -1,6 +1,6 @@
 package com.grepp.spring.app.model.auth;
 
-import com.grepp.spring.app.controller.web.user.form.UserDto;
+import com.grepp.spring.app.model.user.dto.User;
 import java.util.Collection;
 import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,18 +9,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class CustomUserDetail implements UserDetails {
 
-  private UserDto userDto;
+  private User userDto;
 
   public CustomUserDetail() {
   }
 
-  public CustomUserDetail(UserDto userDto) {
+  public CustomUserDetail(User userDto) {
     this.userDto = userDto;
   }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return List.of(new SimpleGrantedAuthority(userDto.getRole()));
+    return List.of(new SimpleGrantedAuthority(userDto.getRole().name()));
   }
 
   @Override
