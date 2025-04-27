@@ -43,13 +43,14 @@ public class UserService {
         Optional<LoginUser> optional = userRepository.selectLoginUserById(userId);
 
         if (optional.isEmpty()) {
-            return Principal.GUEST;
+            throw new CommonException(ResponseCode.BAD_REQUEST);
+
         }
 
         LoginUser loginUser = optional.get();
 
         if (!(loginUser.getPassword()).equals(password)) {
-            return Principal.GUEST;
+            throw new CommonException(ResponseCode.BAD_REQUEST);
         }
 
         return new Principal(List.of(Role.ROLE_CUSTOMER), LocalDateTime.now());
@@ -66,15 +67,10 @@ public class UserService {
         User user = userRepository.selectByEmail(email);
         log.info("selectByEmail 결과: {}", user);
 
-        if (user == null) {
-            log.info("사용자를 찾을 수 없음.");
-            return null;
-        }
-
         log.info("조회된 사용자 역할: {}", user.getRole());
-        if (user.getRole() != Role.ROLE_GUEST) {
+        if (user.getRole() != Role.ROLE_CUSTOMER) {
             log.info("게스트 역할이 아님.");
-            return null;
+            throw new CommonException(ResponseCode.BAD_REQUEST);
         }
 
         GuestUser guestUser = new GuestUser();
