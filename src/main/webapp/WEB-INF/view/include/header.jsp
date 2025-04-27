@@ -1,3 +1,4 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page language="java" %>
 <header class="header">
     <nav class="navbar white">
@@ -7,6 +8,7 @@
             <ul id="nav-mobile" class="right hide-on-med-and-down grey-text">
                 <li><a href="/signin" class="grey-text">sign in</a></li>
                 <li><a href="/signup" class="grey-text">sign up</a></li>
+                <li><a href="/orders/guest" class="grey-text">비회원 주문 확인</a></li>
                 <li>
                     <a href="/cart">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
