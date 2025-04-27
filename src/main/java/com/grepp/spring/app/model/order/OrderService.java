@@ -102,22 +102,20 @@ public class OrderService {
     }
 
     public List<OrderDto> getOrdersByEmail(String email) {
-        List<Long> orderIds = guestOrderEmailMap.entrySet().stream()
-                .filter(entry -> email.equals(entry.getValue()))
-                .map(Map.Entry::getKey)
-                .collect(Collectors.toList());
+        User user = userService.findByEmail(email);
 
-        List<OrderDto> orders = new ArrayList<>();
-        for (Long orderId : orderIds) {
-            Order order = orderRepository.getOrderById(orderId);
-            if (order != null) {
-                OrderDto dto = OrderDto.from(order);
-                dto.setEmail(email);
-                orders.add(dto);
-            }
+        if (user == null) {
+            return new ArrayList<>();
         }
+        List<Order> orderEntities = orderRepository.getOrdersByUserId(user.getUserId());
 
-        return orders;
+        return orderEntities.stream()
+                .map(order -> {
+                    OrderDto dto = OrderDto.from(order);
+                    dto.setEmail(email);
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 
     public List<OrderDto> getAllOrders() {
