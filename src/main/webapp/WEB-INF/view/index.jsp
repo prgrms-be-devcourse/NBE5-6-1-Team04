@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@include file="/WEB-INF/view/include/page.jsp" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <title>Coffee-shop</title>
@@ -16,6 +17,5 @@
 </main>
 <%@include file="/WEB-INF/view/include/footer.jsp" %>
 <script src="${context}/assets/js/cart.js"></script>
-
 </body>
 </html>

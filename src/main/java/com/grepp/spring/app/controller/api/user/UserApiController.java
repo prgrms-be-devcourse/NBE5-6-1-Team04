@@ -10,6 +10,8 @@ import com.grepp.spring.app.model.user.dto.GuestUser;
 import com.grepp.spring.app.model.user.dto.Principal;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -50,15 +52,21 @@ public class UserApiController {
         Principal principal = userService.signin(request.getUserId(), request.getPassword());
 
         session.setAttribute("principal", principal);
+        session.setAttribute("userId", request.getUserId());
 
         return new ResponseEntity<>(principal, HttpStatus.CREATED);
     }
 
     @PostMapping("/guest-signin")
-    public ResponseEntity<GuestUser> guestSignin(
-        @Valid @RequestBody GuestSigninRequest request) {
+    public ResponseEntity<Principal> guestSignin(
+        @Valid @RequestBody GuestSigninRequest request, HttpSession session) {
         GuestUser user = userService.GuestSignin(request.getEmail());
 
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+        Principal principal = new Principal(List.of(Role.ROLE_GUEST), LocalDateTime.now());
+
+        session.setAttribute("principal", principal);
+        session.setAttribute("userId", user.getEmail());
+
+        return new ResponseEntity<>(principal, HttpStatus.CREATED);
     }
 }
