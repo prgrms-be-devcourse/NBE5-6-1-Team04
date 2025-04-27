@@ -32,11 +32,9 @@
             로그인
             <i class="material-icons right">send</i>
         </button>
-        <a href="/guest-signin">
-            <button class="btn waves-effect waves-light offset-s1">
-                비회원 로그인
-                <i class="material-icons right">send</i>
-            </button>
+        <a class="btn waves-effect waves-light offset-s1" href="/guest-signin" style="margin-left: 10px;">
+            비회원 로그인
+            <i class="material-icons right">send</i>
         </a>
     </form:form>
 
