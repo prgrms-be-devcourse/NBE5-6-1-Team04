@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (res.ok) {
       const { userId, role } = await res.json();
+      console.log('asdasdasd', res);
       console.log('세션 정보:', { userId, role });
 
       if (role === 'ROLE_ADMIN') {
