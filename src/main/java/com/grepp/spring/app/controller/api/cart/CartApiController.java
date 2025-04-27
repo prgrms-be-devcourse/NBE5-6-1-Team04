@@ -23,8 +23,6 @@ import org.springframework.web.bind.annotation.*;
 public class CartApiController {
   private final CartService cartService;
 
-  // TODO: [Authentication] 로그인한 사용자만 접근 가능하도록 인증 체크 추가 필요
-  // TODO: [Authorization] 요청의 userId와 로그인한 사용자의 ID가 일치하는지 검증 필요
   @GetMapping("/cart")
   public ResponseEntity<ApiResponse<CartResponse>> getCart(
       @RequestParam("userId") @NotBlank(message = "사용자 ID는 필수입니다.") String userId,  Authentication authentication) {
@@ -38,8 +36,6 @@ public class CartApiController {
     return ResponseEntity.ok(ApiResponse.success(cartResponse));
   }
 
-  // TODO: [Authentication] 로그인한 사용자만 접근 가능하도록 인증 체크 추가 필요
-  // TODO: [Authorization] 요청의 userId와 로그인한 사용자의 ID가 일치하는지 검증 필요
   @PostMapping("/cart")
   public ResponseEntity<ApiResponse<String>> addToCart(@Valid @RequestBody AddCartRequest request,Authentication authentication) {
 
@@ -48,13 +44,11 @@ public class CartApiController {
       throw new AccessDeniedException("본인만 접근할 수 있습니다.");
     }
 
-  log.info("장바구니 추가 요청: {}", request);
+    log.info("장바구니 추가 요청: {}", request);
     cartService.add(request);
     return ResponseEntity.ok(ApiResponse.success("장바구니에 추가되었습니다."));
   }
 
-  // TODO: [Authentication] 로그인한 사용자만 접근 가능하도록 인증 체크 추가 필요
-  // TODO: [Authorization] 요청의 userId와 로그인한 사용자의 ID가 일치하는지 검증 필요
   @PutMapping("/cart")
   public ResponseEntity<ApiResponse<String>> updateCartItemCount(@Valid @RequestBody UpdateCartRequest request,Authentication authentication) {
 
@@ -68,8 +62,6 @@ public class CartApiController {
     return ResponseEntity.ok(ApiResponse.success("장바구니 수량이 수정되었습니다."));
   }
 
-  // TODO: [Authentication] 로그인한 사용자만 접근 가능하도록 인증 체크 추가 필요
-  // TODO: [Authorization] 요청의 userId와 로그인한 사용자의 ID가 일치하는지 검증 필요
   @DeleteMapping("/cart/{cartItemId}")
   public ResponseEntity<ApiResponse<String>> deleteCartItem(
       @PathVariable("cartItemId") Long cartItemId,
@@ -86,8 +78,6 @@ public class CartApiController {
     return ResponseEntity.ok(ApiResponse.success("장바구니 항목이 삭제되었습니다."));
   }
 
-  // TODO: [Authentication] 로그인한 사용자만 접근 가능하도록 인증 체크 추가 필요
-  // TODO: [Authorization] 요청의 userId와 로그인한 사용자의 ID가 일치하는지 검증 필요
   @DeleteMapping("/cart/clear")
   public ResponseEntity<ApiResponse<String>> clearCart(
       @RequestParam("userId") @NotBlank(message = "사용자 ID는 필수입니다.") String userId
