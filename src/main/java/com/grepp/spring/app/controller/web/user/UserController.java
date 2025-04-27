@@ -33,8 +33,9 @@ public class UserController {
     }
 
     @GetMapping("/guest-signin")
-    public String gusetsigninForm() {
-        return "/api/guest_signin";
+    public String gusetsigninForm(Model model) {
+        model.addAttribute("guestSigninForm", new SigninFormDto());
+        return "user/guest-signin";
     }
 
     @GetMapping("/users")
