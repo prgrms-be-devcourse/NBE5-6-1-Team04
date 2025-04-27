@@ -76,7 +76,7 @@ async function submitOrder() {
   if (res.ok) {
     const {userId, role} = await res.json();
     let formData = {}
-    if (role === 'ROLE_GUEST' || !role) {
+    if (role.includes('ROLE_GUEST') || !role) {
       formData = {
         userId: null,
         email: userId,
@@ -84,7 +84,7 @@ async function submitOrder() {
         totalPrice: totalPrice,
         orderAddress: receiverAddress
       };
-    } else if (role === 'ROLE_CUSTOMER') {
+    } else if (role.includes('ROLE_CUSTOMER')) {
       formData = {
         userId: userId,
         email: null,
