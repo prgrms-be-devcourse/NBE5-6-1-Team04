@@ -8,7 +8,6 @@ import com.grepp.spring.app.model.auth.Code.Role;
 import com.grepp.spring.app.model.user.UserService;
 import com.grepp.spring.app.model.user.dto.GuestUser;
 import com.grepp.spring.app.model.user.dto.Principal;
-import com.grepp.spring.app.model.user.dto.User;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -54,7 +53,6 @@ public class UserApiController {
 
         return new ResponseEntity<>(principal, HttpStatus.CREATED);
     }
-
 
 
     @PostMapping("/guest-signin")
