@@ -24,6 +24,7 @@ public class CartService {
   @Transactional
   public void add(@Valid AddCartRequest request) {
     try {
+      // (1) 장바구니 존재 여부 검증: userId의 장바구니가 실제로 존재하는지 확인
       Long cartId = cartRepository.findCartIdByUserId(request.getUserId());
       if (cartId == null) {
         cartRepository.createCart(request.getUserId());
@@ -31,7 +32,7 @@ public class CartService {
       }
 
       CartItem existingItem = cartRepository.findCartItemByCartIdAndProductId(cartId, request.getProductId());
-      
+
       if (existingItem != null) {
         int newCount = existingItem.getProductCount() + request.getProductCount();
         cartRepository.updateCartItemCount(existingItem.getCartItemId(), newCount);
@@ -51,23 +52,24 @@ public class CartService {
 
   public CartResponse getCart(String userId) {
     try {
+      // (2) 장바구니 존재 여부 검증: userId의 장바구니가 실제로 존재하는지 확인
       if (!cartRepository.existsCartByUserId(userId)) {
         cartRepository.createCart(userId);
       }
-      
+
       List<CartItemDto> cartItems = cartRepository.findCartItemsByUserId(userId);
       CartResponse response = new CartResponse();
       response.setItems(cartItems.stream()
-              .map(item -> {
-                CartItemResponse res = CartItemResponse.from(item);
-                res.setTotalPrice(item.getProductPrice() * item.getProductCount());
-                return res;
-              })
-              .toList());
+          .map(item -> {
+            CartItemResponse res = CartItemResponse.from(item);
+            res.setTotalPrice(item.getProductPrice() * item.getProductCount());
+            return res;
+          })
+          .toList());
 
       response.setTotalPrice(cartItems.stream()
-              .mapToInt(item -> item.getProductPrice() * item.getProductCount())
-              .sum());
+          .mapToInt(item -> item.getProductPrice() * item.getProductCount())
+          .sum());
       return response;
     } catch (Exception e) {
       log.error("장바구니 조회 중 오류 발생: userId={}", userId, e);
@@ -79,13 +81,14 @@ public class CartService {
   public void updateCount(UpdateCartRequest request) {
     log.info("장바구니 수량 수정 요청: {}", request);
 
+    // (3) 장바구니 아이템 소유자 검증: 요청한 userId가 해당 cartItem의 소유자인지 확인
     if (!cartRepository.isCartItemOwnedByUser(request.getCartItemId(), request.getUserId())) {
-        throw new IllegalArgumentException("해당 사용자의 장바구니 항목이 아닙니다.");
+      throw new IllegalArgumentException("해당 사용자의 장바구니 항목이 아닙니다.");
     }
 
     if (request.getProductCount() <= 0) {
-        cartRepository.deleteCartItem(request.getCartItemId());
-        return;
+      cartRepository.deleteCartItem(request.getCartItemId());
+      return;
     }
 
     cartRepository.updateCartItemCount(request.getCartItemId(), request.getProductCount());
@@ -95,22 +98,23 @@ public class CartService {
   public void deleteItem(Long cartItemId, String userId) {
     log.info("장바구니 항목 삭제 요청: cartItemId={}", cartItemId);
 
+    // (4) 장바구니 아이템 소유자 검증: 요청한 userId가 해당 cartItem의 소유자인지 확인
     if (!cartRepository.isCartItemOwnedByUser(cartItemId, userId)) {
-        throw new IllegalArgumentException("해당 사용자의 장바구니 항목이 아닙니다.");
+      throw new IllegalArgumentException("해당 사용자의 장바구니 항목이 아닙니다.");
     }
-    
     cartRepository.deleteCartItem(cartItemId);
   }
 
   @Transactional
   public void clearCart(String userId) {
     log.info("장바구니 전체 비우기 요청: userId={}", userId);
-    
+
+    // (5) 장바구니 존재 여부 검증: userId의 장바구니가 실제로 존재하는지 확인
     Long cartId = cartRepository.findCartIdByUserId(userId);
     if (cartId == null) {
-        throw new IllegalArgumentException("장바구니가 존재하지 않습니다.");
+      throw new IllegalArgumentException("장바구니가 존재하지 않습니다.");
     }
-    
+
     cartRepository.deleteAllCartItems(cartId);
   }
 }
