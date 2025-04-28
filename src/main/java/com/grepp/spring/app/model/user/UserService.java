@@ -14,6 +14,8 @@ import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public void signup(User dto, Role role) {
@@ -31,8 +34,9 @@ public class UserService {
             throw new CommonException(ResponseCode.BAD_REQUEST);
         }
 
+        String encodedPassword = passwordEncoder.encode(dto.getPassword());
         dto.setRole(role);
-        dto.setPassword(dto.getPassword());
+        dto.setPassword(encodedPassword);
         dto.setCreatedAt(LocalDateTime.now());
         userRepository.insert(dto);
 
@@ -50,17 +54,20 @@ public class UserService {
 
         LoginUser loginUser = optional.get();
 
-        if (!(loginUser.getPassword()).equals(password)) {
+        if (!passwordEncoder.matches(password, loginUser.getPassword())) {
             throw new CommonException(ResponseCode.BAD_REQUEST);
         }
-
-        return new Principal(List.of(Role.ROLE_CUSTOMER), LocalDateTime.now());
+        if (loginUser.getUserId().equals("admin")) {
+            return new Principal(List.of(Role.ROLE_ADMIN), LocalDateTime.now());
+        } else {
+            return new Principal(List.of(Role.ROLE_CUSTOMER), LocalDateTime.now());
+        }
     }
 
 
     public User findById(String userId) {
         return userRepository.selectById(userId)
-            .orElseThrow(() -> new CommonException(ResponseCode.BAD_REQUEST));
+                .orElseThrow(() -> new CommonException(ResponseCode.BAD_REQUEST));
     }
 
 //    public GuestUser GuestSignin(String email) {
@@ -119,5 +126,9 @@ public class UserService {
         guestUser.setRole(user.getRole());
         guestUser.setAddress(user.getAddress());
         return guestUser;
+    }
+
+    public User findByEmail(String email) {
+        return userRepository.selectByEmail(email);
     }
 }

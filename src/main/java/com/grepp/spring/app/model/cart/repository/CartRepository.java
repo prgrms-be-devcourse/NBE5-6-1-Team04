@@ -21,6 +21,7 @@ public interface CartRepository {
     @Select("SELECT cart_id FROM cart WHERE user_id = #{userId}")
     Long findCartIdByUserId(String userId);
 
+    // (1) 해당 userId의 장바구니가 존재하는지 검증
     @Select("SELECT EXISTS (SELECT 1 FROM cart WHERE user_id = #{userId})")
     boolean existsCartByUserId(String userId);
 
@@ -44,6 +45,7 @@ public interface CartRepository {
     @Select("SELECT cart_item_id, cart_id, product_id, product_count FROM cart_item WHERE cart_item_id = #{cartItemId}")
     Optional<CartItem> findCartItemById(Long cartItemId);
 
+    // (2) cart_item_id가 해당 userId의 장바구니에 속하는지(소유자인지) 검증
     @Select("SELECT EXISTS (SELECT 1 FROM cart_item ci " +
             "JOIN cart c ON ci.cart_id = c.cart_id " +
             "WHERE ci.cart_item_id = #{cartItemId} AND c.user_id = #{userId})")

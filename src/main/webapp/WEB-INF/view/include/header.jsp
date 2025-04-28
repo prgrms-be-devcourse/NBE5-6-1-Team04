@@ -31,3 +31,4 @@
         </div>
     </nav>
 </header>
+<script src="${context}/assets/js/header.js"></script>

@@ -69,33 +69,54 @@ async function submitOrder() {
     totalPrice += Number(item.productPrice) * Number(item.productCount);
   }
 
-  const formData = {
-    userId: null, // TODO: 로그인 되어 있으면 userId 채워야 함
-    email: "guest@example.com", // TODO: 비회원이라면 email로
-    orderItems: orderItems,
-    totalPrice: totalPrice,
-    orderAddress: receiverAddress
-  };
-
-  try {
-    const response = await fetch('/api/orders', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(formData)
-    });
-
-    if (response.ok) {
-      alert('주문이 완료되었습니다.');
-      clearCart();
-      window.location.href = '/';
-    } else {
-      alert('주문 실패: ' + await response.text());
+  const res = await fetch('/api/session-info', {
+    method: 'GET',
+    credentials: 'same-origin'
+  });
+  if (res.ok) {
+    const {userId, role} = await res.json();
+    let formData = {}
+    if (role.includes('ROLE_GUEST') || !role) {
+      formData = {
+        userId: null,
+        email: userId,
+        orderItems: orderItems,
+        totalPrice: totalPrice,
+        orderAddress: receiverAddress
+      };
+    } else if (role.includes('ROLE_CUSTOMER')) {
+      formData = {
+        userId: userId,
+        email: null,
+        orderItems: orderItems,
+        totalPrice: totalPrice,
+        orderAddress: receiverAddress
+      };
     }
-  } catch (error) {
-    console.error('주문 에러', error);
-    alert('주문 중 오류가 발생했습니다.');
-  }
-}
 
+
+    try {
+      const response = await fetch('/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData),
+        credentials: "include"
+      });
+
+      if (response.ok) {
+        alert('주문이 완료되었습니다.');
+        clearCart();
+        window.location.href = '/';
+      } else {
+        alert('주문 실패: ' + await response.text());
+      }
+    } catch (error) {
+      console.error('주문 에러', error);
+      alert('주문 중 오류가 발생했습니다.');
+    }
+
+  }
+
+}
