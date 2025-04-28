@@ -122,7 +122,11 @@ public class OrderService {
     public List<OrderDto> getAllOrders() {
         List<Order> orderEntities = orderRepository.getAllOrders();
         List<OrderDto> orderDtos = orderEntities.stream()
-                .map(OrderDto::from)
+                .map(order -> {
+                    OrderDto dto = OrderDto.from(order);
+                    dto.setUserId(order.getUserId());
+                    return dto;
+                })
                 .collect(Collectors.toList());
 
         for (OrderDto dto : orderDtos) {
