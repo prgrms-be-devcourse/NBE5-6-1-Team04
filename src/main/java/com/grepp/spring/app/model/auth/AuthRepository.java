@@ -1,4 +1,4 @@
-package com.grepp.spring.app.model;
+package com.grepp.spring.app.model.auth;
 
 import com.grepp.spring.app.model.user.dto.User;
 import java.util.Optional;

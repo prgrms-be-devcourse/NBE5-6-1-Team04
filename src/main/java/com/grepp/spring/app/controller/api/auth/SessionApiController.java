@@ -1,8 +1,8 @@
 package com.grepp.spring.app.controller.api.auth;
 
 import com.grepp.spring.app.model.auth.CustomUserDetail;
-import com.grepp.spring.app.model.user.dto.Principal;
-import jakarta.servlet.http.HttpSession;
+import org.springframework.security.core.GrantedAuthority;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,17 +20,21 @@ import java.util.Map;
 public class SessionApiController {
 
     @GetMapping("/session-info")
-    public ResponseEntity<Map<String, Object>> sessionInfo(HttpSession session) {
-        Principal principal = (Principal) session.getAttribute("principal");
-        String userId = (String) session.getAttribute("userId");
-
-        if (principal == null || userId == null) {
+    public ResponseEntity<Map<String, Object>> sessionInfo(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
+        CustomUserDetail userDetail = (CustomUserDetail) authentication.getPrincipal();
+
         Map<String, Object> result = new HashMap<>();
-        result.put("userId", userId);
-        result.put("role", principal.roles());
+        result.put("userId", userDetail.getUsername());
+        result.put("role", userDetail.getAuthorities()
+            .stream()
+            .map(GrantedAuthority::getAuthority)
+            .toList());
+
         return ResponseEntity.ok(result);
     }
+
 }
