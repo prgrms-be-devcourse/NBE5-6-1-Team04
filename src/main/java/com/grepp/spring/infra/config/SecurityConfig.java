@@ -54,6 +54,11 @@ public class SecurityConfig {
             .anyRequest().authenticated()
         )
 
+        .rememberMe(remember -> remember
+            .rememberMeParameter("remember-me")
+            .tokenValiditySeconds(60 * 60 * 24 * 7)
+            .key("1234")
+        )
         .formLogin(form -> form
             .loginPage("/user/signin")
             .loginProcessingUrl("/api/signin")
