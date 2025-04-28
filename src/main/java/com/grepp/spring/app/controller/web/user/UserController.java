@@ -25,12 +25,18 @@ public class UserController {
         model.addAttribute("signupForm", new SignupFormDto());
         return "user/signup";
     }
-
-    @GetMapping("/signin")
-    public String signinPage(Model model) {
-        model.addAttribute("signinForm", new SigninFormDto());
+    @GetMapping("/user/signin")
+    public String signinForm(Model model) {
+        model.addAttribute("signupForm", new SignupFormDto());
         return "user/signin";
+
     }
+
+//    @GetMapping("/signin")
+//    public String signinPage(Model model) {
+//        model.addAttribute("signinForm", new SigninFormDto());
+//        return "user/signin";
+//    }
 
     @GetMapping("/guest-signin")
     public String gusetsigninForm(Model model) {

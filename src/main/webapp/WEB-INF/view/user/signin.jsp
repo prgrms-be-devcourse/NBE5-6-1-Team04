@@ -13,7 +13,7 @@
         <div class="card-panel red lighten-2 text-white">아이디나 비밀번호를 확인하세요</div>
     </c:if>
     <%--    <form:form modelAttribute="signinForm" class="col s12" action="/api/signin" method="post">--%>
-    <form id="signinForm" class="col s12">
+    <form id="signinForm" class="col s12" action="/api/signin" method="post">
         <div class="row">
             <div class="input-field col s7 ">
                 <i class="material-icons prefix">account_circle</i>
@@ -30,6 +30,16 @@
 <%--                            class="validate"/>--%>
 <%--                <form:errors path="password" cssClass="helper-text"/>--%>
             </div>
+            <div class="input-field col s7">
+                <p>
+                    <label>
+                        <input type="checkbox" id="remember-me" name="remember-me" />
+                        <span>로그인 상태 유지</span>
+                    </label>
+                </p>
+
+            </div>
+
         </div>
         <button class="btn waves-effect waves-light offset-s1" type="submit" name="action">
             로그인
@@ -45,7 +55,7 @@
 
 </main>
 <%@include file="/WEB-INF/view/include/footer.jsp" %>
-<script src="${context}/assets/js/signin.js"></script>
+
 
 </body>
 </html>
