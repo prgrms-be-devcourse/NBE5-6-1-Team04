@@ -25,7 +25,7 @@ public interface UserRepository {
     @Select("select * from user where user_id = #{userId}")
     Optional<User> selectById(String userId);
 
-    @Select("select user_id, password from user where user_id = #{userId}")
+    @Select("select user_id, password, role from user where user_id = #{userId}")
     Optional<LoginUser> selectLoginUserById(String userId);
 
     @Select("select * from user where email = #{email}")
