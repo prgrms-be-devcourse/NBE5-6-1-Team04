@@ -57,7 +57,7 @@ public class UserService {
         if (!passwordEncoder.matches(password, loginUser.getPassword())) {
             throw new CommonException(ResponseCode.BAD_REQUEST);
         }
-        if (loginUser.getUserId().equals("admin")) {
+        if (loginUser.getRole().equals(Role.ROLE_ADMIN)) {
             return new Principal(List.of(Role.ROLE_ADMIN), LocalDateTime.now());
         } else {
             return new Principal(List.of(Role.ROLE_CUSTOMER), LocalDateTime.now());
