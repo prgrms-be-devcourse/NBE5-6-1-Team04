@@ -44,17 +44,17 @@ public class UserApiController {
         userService.signup(request.toDto(), Role.ROLE_CUSTOMER);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-
-    @PostMapping("/signin")
-    public ResponseEntity<Principal> signin(
-        @Valid @RequestBody SigninRequest request, HttpSession session) {
-        Principal principal = userService.signin(request.getUserId(), request.getPassword());
-
-        session.setAttribute("principal", principal);
-        session.setAttribute("userId", request.getUserId());
-
-        return new ResponseEntity<>(principal, HttpStatus.CREATED);
-    }
+//
+//    @PostMapping("/signin")
+//    public ResponseEntity<Principal> signin(
+//        @Valid @RequestBody SigninRequest request, HttpSession session) {
+//        Principal principal = userService.signin(request.getUserId(), request.getPassword());
+//
+//        session.setAttribute("principal", principal);
+//        session.setAttribute("userId", request.getUserId());
+//
+//        return new ResponseEntity<>(principal, HttpStatus.CREATED);
+//    }
 
     @PostMapping("/guest-signin")
     public ResponseEntity<Principal> guestSignin(

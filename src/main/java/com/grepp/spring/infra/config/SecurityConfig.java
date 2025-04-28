@@ -1,71 +1,86 @@
 package com.grepp.spring.infra.config;
 
-import com.grepp.spring.infra.config.handler.AuthFailHandler;
+import com.grepp.spring.app.model.auth.Code.authenum.Roleform;
+import com.grepp.spring.app.model.auth.CustomUserDetail;
+import com.grepp.spring.app.model.auth.CustomUserService;
+import com.grepp.spring.app.model.user.dto.User;
+import com.grepp.spring.app.model.auth.AuthRepository;
 import com.grepp.spring.infra.config.handler.CustomLoginSuccessHandler;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.stereotype.Component;
 
-@EnableWebSecurity
+
 @Configuration
+@RequiredArgsConstructor
+@ComponentScan(basePackages = "com.grepp.spring.app.model.auth")
+@EnableWebSecurity
 public class SecurityConfig {
 
-  private final AuthFailHandler authFailHandler;
 
-  public SecurityConfig(AuthFailHandler authFailHandler) {
-    this.authFailHandler = authFailHandler;
+  @Bean
+  public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+    return http.getSharedObject(AuthenticationManagerBuilder.class)
+        .build();
   }
 
   @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
-        .authorizeHttpRequests((req)->req
-            .requestMatchers("/api/signin","/api/signup","/","/api/guest-signin").permitAll()
+        .authorizeHttpRequests((req) -> req
+            .requestMatchers("/api/signin", "/signup", "/api/signup", "/", "/user/signin", "/guest-signin", "/user/guest-signin", "/users", "/api/guest-signin").permitAll()
             .requestMatchers("/assets/**", "/resources/**", "/webapp/**").permitAll()
-            .requestMatchers("/admin").permitAll()
-            .requestMatchers("/api/products","/api/products/**","/api/new-products").permitAll()
+            .requestMatchers("/admin").hasRole(Roleform.ADMIN.getRole())
+            .requestMatchers("/api/products", "/api/products/**", "/api/new-products").permitAll()
             .requestMatchers("/product/**").permitAll()
-            .requestMatchers("/signin").permitAll()
-            .requestMatchers("/signup").permitAll()
-            .requestMatchers("/api/cart/**").authenticated()
-            .requestMatchers("/orders").permitAll()
-            .requestMatchers("/orders/guest").permitAll()
-            .requestMatchers("/guest-signin").permitAll()
-            .requestMatchers("/api/orders").permitAll()
+            .requestMatchers("/cart/**").authenticated()
+            .requestMatchers("/api/orders").authenticated()
+            .requestMatchers("/api/orders/guest").permitAll()
             .requestMatchers("/api/session-info").permitAll()
-            .requestMatchers("/cart").permitAll()
-            .requestMatchers("/my-page/**").permitAll()
+            .requestMatchers("/cart").authenticated()
+            .requestMatchers("/my-page/**").authenticated()
             .anyRequest().authenticated()
         )
-//        .formLogin((form)->form
-//            .loginPage("/user/signin")
-//            .usernameParameter("userId")
-//            .loginProcessingUrl("/api/signin")
-//            .successHandler(customLoginSuccessHandler())
-//            .failureHandler(authFailHandler))
-        .rememberMe(rememberMe -> rememberMe.key("remember-me"))
-        .logout((logout)->logout.permitAll()
-            .logoutSuccessUrl("/"))
-        .sessionManagement(session -> {
-          session.maximumSessions(1);
-          session.invalidSessionUrl("/");}).csrf(csrf->csrf.disable());
+
+        .rememberMe(remember -> remember
+            .rememberMeParameter("remember-me")
+            .tokenValiditySeconds(60 * 60 * 24 * 7)
+            .key("1234")
+        )
+        .formLogin(form -> form
+            .loginPage("/user/signin")
+            .loginProcessingUrl("/api/signin")
+            .usernameParameter("userId")
+            .passwordParameter("password")
+            .successHandler(new CustomLoginSuccessHandler())
+            .defaultSuccessUrl("/",true)
+            .permitAll()
+        )
+        .logout(logout -> logout
+            .logoutSuccessUrl("/")
+            .permitAll()
+        )
+        .csrf(csrf -> csrf.disable());
 
     return http.build();
   }
 
-  @Bean
-  public AuthenticationSuccessHandler customLoginSuccessHandler() {
-    return new CustomLoginSuccessHandler();
-  }
+
 
   @Bean
-  public PasswordEncoder passwordEncoder(){
+  public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
-
 }
