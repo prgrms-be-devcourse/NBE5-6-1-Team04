@@ -30,8 +30,7 @@ public class OrderDto {
         orderDto.setOrderAddress(order.getOrderAddress());
         orderDto.setCreatedAt(order.getCreatedAt());
 
-        if (order.getUserId() != null) {
-            orderDto.setEmail(order.getUserId().substring(6));
+        if (order.getUserId() != null && order.getUserId().startsWith("guest_")) {
             orderDto.setUserId(null);
         }
 
