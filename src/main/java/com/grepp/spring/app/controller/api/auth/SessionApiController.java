@@ -1,6 +1,9 @@
 package com.grepp.spring.app.controller.api.auth;
 
 import com.grepp.spring.app.model.auth.CustomUserDetail;
+import jakarta.servlet.http.HttpSession;
+import java.util.List;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 
 import lombok.extern.slf4j.Slf4j;
@@ -20,21 +23,39 @@ import java.util.Map;
 public class SessionApiController {
 
     @GetMapping("/session-info")
-    public ResponseEntity<Map<String, Object>> sessionInfo(Authentication authentication) {
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    public ResponseEntity<Map<String, Object>> sessionInfo(Authentication authentication, HttpSession session) {
+        Map<String, Object> result = new HashMap<>();
+
+        // 🔥 세션(userId, role) 먼저 체크 (비회원 먼저 체크)
+        String userId = (String) session.getAttribute("userId");
+        String role = (String) session.getAttribute("role");
+
+        if (userId != null && role != null) {
+            result.put("userId", userId);
+            result.put("role", List.of(role));
+            return ResponseEntity.ok(result);
         }
 
-        CustomUserDetail userDetail = (CustomUserDetail) authentication.getPrincipal();
+        // 🔥 그 다음, 인증(Authentication) 체크 (회원)
+        if (authentication != null && authentication.isAuthenticated()
+            && !(authentication instanceof AnonymousAuthenticationToken)) {
 
-        Map<String, Object> result = new HashMap<>();
-        result.put("userId", userDetail.getUsername());
-        result.put("role", userDetail.getAuthorities()
-            .stream()
-            .map(GrantedAuthority::getAuthority)
-            .toList());
+            Object principal = authentication.getPrincipal();
+            if (principal instanceof CustomUserDetail userDetail) {
+                result.put("userId", userDetail.getUsername());
+                result.put("role", userDetail.getAuthorities()
+                    .stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .toList());
+                return ResponseEntity.ok(result);
+            }
+        }
 
-        return ResponseEntity.ok(result);
+        // 🔥 둘 다 아니면 -> 로그인 안 된 상태
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
+
+
+
 
 }

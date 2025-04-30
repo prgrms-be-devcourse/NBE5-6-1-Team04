@@ -15,6 +15,10 @@
     <h4>관리자 페이지</h4>
 
     <div class="section">
+        <a href="/admin/new-product-form" class="btn blue">신규 상품 등록</a>
+    </div>
+
+    <div class="section">
         <p>아래에서 전체 주문 내역을 확인하실 수 있습니다.</p>
     </div>
 

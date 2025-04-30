@@ -12,8 +12,7 @@ public class CustomUserDetail implements UserDetails {
 
   private User userDto;
 
-  public CustomUserDetail() {
-  }
+
 
   public CustomUserDetail(User userDto) {
     this.userDto = userDto;
