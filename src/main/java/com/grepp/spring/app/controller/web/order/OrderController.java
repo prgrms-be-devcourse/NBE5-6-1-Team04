@@ -21,4 +21,10 @@ public class OrderController {
     public String showGuestOrderPage() {
         return "order/guest";
     }
+
+    @GetMapping("/admin/new-product-form")
+    public String showInsertProductForm() {
+        return "admin/insert-product";
+    }
+
 }
